@@ -124,7 +124,7 @@ var gamePlayState = new Phaser.Class({
             minx: 0,
             maxx: 500
         });
-        //this.scale.startFullscreen();
+        this.scale.startFullscreen();
 
     },
 
