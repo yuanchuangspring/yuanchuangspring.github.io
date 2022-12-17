@@ -110,6 +110,7 @@ var gamePlayState = new Phaser.Class({
         
         //镜头跟随
         this.cameras.main.startFollow(this.sprite);
+        this.cameras.main.setZoom(1);
         
         //摇杆插件
         this.joystick = this.add.joystick({
@@ -124,12 +125,15 @@ var gamePlayState = new Phaser.Class({
             minx: 0,
             maxx: 500
         });
-        this.scale.startFullscreen();
+        //this.scale.startFullscreen();
 
     },
 
     update: function ()
     {
+       for(delll=0;delll<hasLoadDic.length;delll++){
+              getImportant(hasLoadDic[delll][0],hasLoadDic[delll][1],varbx,varby,delll);
+       }
         //设置速度 联动摇杆
         var speed = 150;
         dx=this.joystick.deltaX;
@@ -146,37 +150,41 @@ var gamePlayState = new Phaser.Class({
         }
         
         //地图刷新
-        currentBlock=getblock(this.sprite.x,this.sprite.y)[2];
-        varbx=getblock(this.sprite.x,this.sprite.y)[0];
-        varby=getblock(this.sprite.x,this.sprite.y)[1];
+        spx=this.sprite.x;
+        spy=this.sprite.y;
+        currentBlock=getblock(spx,spy)[2];
+        varbx=getblock(spx,spy)[0];
+        varby=getblock(spx,spy)[1];
         
-        
+        //创世区块
+        if(!mapdic.hasOwnProperty("0/0")){
+          createworldByblock(0,0);
+          blockDraw(this.physics.add.group(),this.physics.add.group(),{
+               x:0,
+               y:0,
+               block:mapdic["0/0"]
+            });
+          hasLoadDic.push([0,0]);
+        }
         if(currentBlock!=previousBlock){
           
           //如果玩家区块位置改变
           previousBlock=currentBlock;
           
-          //绘制函数
-          blockDraw(this.physics.add.group(),this.physics.add.group(),{
-             x:varbx*307.2,
-             y:varby*307.2,
-             block:gettiles(this.sprite.x,this.sprite.y)
-          });
-        
-          //更新已加载区块
-          hasLoadDic.push([varbx,varby]);
+          
           
           //绘制四周区块
           checklist=checkHas(varbx,varby);
           
           for(i=0;i<checklist.length;i++){
             if(!mapdic.hasOwnProperty(checklist[i][0]+"/"+checklist[i][1])){
-            createworldByblock(checklist[i][0],checklist[i][1]);
+                createworldByblock(checklist[i][0],checklist[i][1]);
             }
+            
             //绘制函数
             blockDraw(this.physics.add.group(),this.physics.add.group(),{
-               x:checklist[i][0]*307.2,
-               y:checklist[i][1]*307.2,
+               x:checklist[i][0],
+               y:checklist[i][1],
                block:mapdic[checklist[i][0]+"/"+checklist[i][1]]
             });
             

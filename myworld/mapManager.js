@@ -18,8 +18,10 @@ function createworld(x,y){
     
     for(j=0;j<100;j++){
       //待完成:柏林噪音引入地图生成
-      noiTEM=noise.perlin2((bx*10+j%10)/map_size,(by*10+Math.floor(j/10))/map_size);
-      noiWAT=noise.perlin2((bx*10+j%10)/map_size,(by*10+Math.floor(j/10))/map_size);
+      noix=(bx*10+j%10)/map_size;
+      noiy=(by*10+Math.floor(j/10))/map_size;
+      noiTEM=noise.perlin2(noix,noiy);
+      noiWAT=noise.perlin2(noiTEM,noise.perlin2(noiy,noix));
       TYPE=areaConfig[getType(noiTEM,noiWAT)];
       //进行地面附着物生成
       adding="";
@@ -38,15 +40,16 @@ function createworldByblock(bx,by){
     
     for(j=0;j<100;j++){
       //待完成:柏林噪音引入地图生成
-      noiTEM=noise.perlin2((bx*10+j%10)/map_size,(by*10+Math.floor(j/10))/map_size);
-      noiWAT=noise.perlin2((bx*10+j%10)/map_size,(by*10+Math.floor(j/10))/map_size);
+      noix=(bx*10+j%10)/map_size;
+      noiy=(by*10+Math.floor(j/10))/map_size;
+      noiTEM=noise.perlin2(noix,noiy);
+      noiWAT=noise.perlin2(noiTEM,noise.perlin2(noiy,noix));
       TYPE=areaConfig[getType(noiTEM,noiWAT)];
       //进行地面附着物生成
       adding="";
       
       if(TYPE.addtion.hasOwnProperty(0)){
-        
-         if(Math.random()<=TYPE.addtion[0].value){adding=TYPE.addtion[0].key}
+         if(Random(0,1)<=TYPE.addtion[0].value){adding=TYPE.addtion[0].key}
       }
       mapdic[bx+"/"+by].push([TYPE.main+"_tile",adding]);
       
@@ -78,10 +81,10 @@ function blockDraw(obj,obj2,data){
     //需要定义全局列表 objlist
     //需要两个obj 均为group类
     
-    objlist[Math.floor(data.x/307.2)+"/"+Math.floor(data.y/307.2)]=[Math.floor(data.x/307.2),Math.floor(data.y/307.2),obj,obj2];
+    objlist[data.x+"/"+data.y]=[data.x,data.y,obj,obj2];
     for(drawnnn=0;drawnnn<100;drawnnn++){
-        x=data.x+drawnnn%10*30.72;
-        y=data.y+Math.floor(drawnnn/10)*30.72;
+        x=data.x*307.2+drawnnn%10*30.72;
+        y=data.y*307.2+Math.floor(drawnnn/10)*30.72;
         ind=obj.create(x,y,data.block[drawnnn][0]);
         ind.setScale(1.92);
         ind.setDepth(0);
@@ -99,12 +102,13 @@ function blockDraw(obj,obj2,data){
 }
 
 function getImportant(bx,by,bxo,byo,n){
-    if(((bx-bxo)**2+(by-byo)**2)>6){
+    
+    if(((bx-bxo)**2+(by-byo)**2)>2){
       if(objlist.hasOwnProperty(bx+"/"+by)){
       objlist[bx+"/"+by][2].clear(true,true);
       objlist[bx+"/"+by][3].clear(true,true);
       hasLoadDic.splice(n,1);
-      }else{console.log("错误:");console.log(bx+"/"+by);}
+      }else{console.log("错误:");}
       
     }
 }
@@ -139,6 +143,9 @@ function checkHas(x,y){
     if(locallist.indexOf((x+1)+"/"+(y+1))==-1){
       check.push([x+1,y+1]);
     }
+  
+    
+    
     return check;
 }
 
@@ -156,16 +163,18 @@ function getHas(bx,by){
     ];
 }
 function getType(TEM,WAT){
-    if(TEM<=-0.2 && WAT<=0){return "tanyuan"}
-    if(TEM<=-0.2 && WAT>0){return "hansen"}
-    if(TEM<=0 && WAT<=-0.2){return "wencao"}
-    if(TEM<=0 && WAT<=0.2){return "wenji"}
-    if(TEM<=0 && WAT>0.2){return "wenyu"}
-    if(TEM<=0.2 && WAT<=-0.2){return "resha"}
-    if(TEM<=0.2 && WAT<=0){return "wenji"}
-    if(TEM<=0.2 && WAT<=0.2){return "wenyu"}
-    if(TEM<=0.2 && WAT>0.2){return "reyu"}
-    if(TEM>0.2 && WAT<=-0.2){return "resha"}
-    if(TEM>0.2 && WAT<=0.2){return "recao"}
-    if(TEM>0.2 && WAT>0.2){return "resha"}
+    
+    
+    if(TEM<=-0.15 && WAT<=0){return "tanyuan"}
+    if(TEM<=-0.15 && WAT>0){return "hansen"}
+    if(TEM<=0 && WAT<=-0.15){return "wencao"}
+    if(TEM<=0 && WAT<=0.15){return "wenji"}
+    if(TEM<=0 && WAT>0.15){return "wenyu"}
+    if(TEM<=0.15 && WAT<=-0.15){return "resha"}
+    if(TEM<=0.15 && WAT<=0){return "wenji"}
+    if(TEM<=0.15 && WAT<=0.15){return "wenyu"}
+    if(TEM<=0.15 && WAT>0.15){return "reyu"}
+    if(TEM>0.15 && WAT<=-0.15){return "resha"}
+    if(TEM>0.15 && WAT<=0.15){return "recao"}
+    if(TEM>0.15 && WAT>0.15){return "resha"}
 }
