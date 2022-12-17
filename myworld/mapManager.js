@@ -8,7 +8,7 @@ var map_size=80;
 
 //perlinjs没有提供seed入口，所以对perlinjs重写
 //添加external_seed，外部引入种子
-var external_seed=1164;
+var external_seed=Math.random()*1314521;
 
 function createworld(x,y){
     //创造指定绝对位置的区块
