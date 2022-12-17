@@ -1,6 +1,6 @@
 /**
 *文件名:mapManager.js
-*说明:游戏地图加载文件
+*说明:地图引擎
 *重写:20221217
 */
 
@@ -164,17 +164,17 @@ function getHas(bx,by){
 }
 function getType(TEM,WAT){
     
-    
-    if(TEM<=-0.15 && WAT<=0){return "tanyuan"}
-    if(TEM<=-0.15 && WAT>0){return "hansen"}
-    if(TEM<=0 && WAT<=-0.15){return "wencao"}
-    if(TEM<=0 && WAT<=0.15){return "wenji"}
-    if(TEM<=0 && WAT>0.15){return "wenyu"}
-    if(TEM<=0.15 && WAT<=-0.15){return "resha"}
-    if(TEM<=0.15 && WAT<=0){return "wenji"}
-    if(TEM<=0.15 && WAT<=0.15){return "wenyu"}
-    if(TEM<=0.15 && WAT>0.15){return "reyu"}
-    if(TEM>0.15 && WAT<=-0.15){return "resha"}
-    if(TEM>0.15 && WAT<=0.15){return "recao"}
-    if(TEM>0.15 && WAT>0.15){return "resha"}
+    //群系生成
+    if(TEM<=-0.2 && WAT<=0){return "tanyuan"}
+    if(TEM<=-0.2 && WAT>0){return "hansen"}
+    if(TEM<=0 && WAT<=-0.2){return "wencao"}
+    if(TEM<=0 && WAT<=0.2){return "wenji"}
+    if(TEM<=0 && WAT>0.2){return "wenyu"}
+    if(TEM<=0.2 && WAT<=-0.2){return "resha"}
+    if(TEM<=0.2 && WAT<=0){return "wenji"}
+    if(TEM<=0.2 && WAT<=0.2){return "wenyu"}
+    if(TEM<=0.2 && WAT>0.2){return "reyu"}
+    if(TEM>0.2 && WAT<=-0.2){return "resha"}
+    if(TEM>0.2 && WAT<=0.2){return "recao"}
+    if(TEM>0.2 && WAT>0.2){return "reyu"}
 }
