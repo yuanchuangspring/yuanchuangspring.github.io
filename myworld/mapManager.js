@@ -24,10 +24,15 @@ function createworld(x,y){
       noiWAT=noise.perlin2(noiTEM,noise.perlin2(noiy,noix));
       TYPE=areaConfig[getType(noiTEM,noiWAT)];
       //进行地面附着物生成
-      adding="";
+      adding={key:"",collide:[]};
       
       if(TYPE.addtion.hasOwnProperty(0)){
-         if(Random(0,1)<=TYPE.addtion[0].value){adding=TYPE.addtion[0].key}
+         for(addnum=0;addnum<TYPE.addtion.length;addnum++){
+             if(Random(0,1)<=TYPE.addtion[addnum].value){
+               adding.key=TYPE.addtion[addnum].key;
+               if(TYPE.addtion[addnum].hasOwnProperty("collide")){adding.collide=TYPE.addtion[addnum].collide;}
+             }
+         }
       }
       mapdic[bx+"/"+by].push([TYPE.main+"_tile",adding]);
       
@@ -46,11 +51,17 @@ function createworldByblock(bx,by){
       noiWAT=noise.perlin2(noiTEM,noise.perlin2(noiy,noix));
       TYPE=areaConfig[getType(noiTEM,noiWAT)];
       //进行地面附着物生成
-      adding="";
+      adding={key:"",collide:[]};
       
       if(TYPE.addtion.hasOwnProperty(0)){
-         if(Random(0,1)<=TYPE.addtion[0].value){adding=TYPE.addtion[0].key}
+         for(addnum=0;addnum<TYPE.addtion.length;addnum++){
+             if(Random(0,1)<=TYPE.addtion[addnum].value){
+               adding.key=TYPE.addtion[addnum].key;
+               if(TYPE.addtion[addnum].hasOwnProperty("collide")){adding.collide=TYPE.addtion[addnum].collide;}
+             }
+         }
       }
+      console.log(adding);
       mapdic[bx+"/"+by].push([TYPE.main+"_tile",adding]);
       
     }
@@ -74,7 +85,7 @@ function gettiles(x,y){
     
 }
 
-function blockDraw(obj,obj2,data){
+function blockDraw(obj,obj2,data,group){
     console.log("mapManager is working...");
     //绘制区块,传参为区块数据
     //用于主程序 update() 调用刷新
@@ -89,13 +100,19 @@ function blockDraw(obj,obj2,data){
         ind.setScale(1.92);
         ind.setDepth(0);
         
-        if(data.block[drawnnn][1]!=""){
+        if(data.block[drawnnn][1].key!=""){
         
-        ind_adding=obj2.create(x,y,data.block[drawnnn][1]);
-        ind_adding.setScale(1.92);
+        ind_adding=obj2.create(x,y,data.block[drawnnn][1].key);
+        ind_adding.setScale(0.12);
         ind_adding.setDepth(1);
-        ind_adding.setBodySize(50,50,true);
+        if(data.block[drawnnn][1].collide.length==2){
+            ind_adding.setBodySize(data.block[drawnnn][1].collide[0],data.block[drawnnn][1].collide[1],true);
+        }
+        if(data.block[drawnnn][1].collide.length==1){
+            ind_adding.setBodySize(1,1,true);
+        }
         ind_adding.setPushable(false);
+        group.add(ind_adding);
         
         }
     }

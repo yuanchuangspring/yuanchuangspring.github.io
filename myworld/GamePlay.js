@@ -4,6 +4,7 @@ var currentBlock="";
 var hasLoadDic=[];
 var objlist=[];
 var hasToLoadDic=[];
+var dd=0;
 
 var gamePlayState = new Phaser.Class({
   
@@ -43,7 +44,7 @@ var gamePlayState = new Phaser.Class({
         
         
         //资源加载
-        this.load.image('player', 'assets/player.png');
+        this.load.spritesheet('player', 'assets/player48x48.png',{frameWidth:72,frameHeight:72});
         this.load.image('player_left', 'assets/player_left.png');
         this.load.image('bg', 'assets/sky.png');
         this.load.image('vjoy_base', 'assets/base.png');
@@ -52,7 +53,6 @@ var gamePlayState = new Phaser.Class({
         
         //地图tiles
         this.load.image("grass_tile","assets/maptiles/grass.png");
-        this.load.image("rock_tile","assets/maptiles/rock.png");
         this.load.image("cold_grass_tile","assets/maptiles/cold_grass.png");
         this.load.image("sand_tile","assets/maptiles/sand.png");
         this.load.image("hot_grass_tile","assets/maptiles/hot_grass.png");
@@ -66,6 +66,14 @@ var gamePlayState = new Phaser.Class({
         this.load.image("xianrenzhang","assets/building/xianrenzhang.png");
         this.load.image("taixian","assets/building/taixian.png");
         this.load.image("tree_2","assets/building/tree_2.png");
+        this.load.image("kucao","assets/building/kucao.png");
+        this.load.image("songshu","assets/building/songshu.png");
+        this.load.image("big_rock","assets/building/big_rock.png");
+        this.load.image("medium_rock","assets/building/medium_rock.png");
+        
+        //item 物品加载
+        this.load.spritesheet("item","assets/items/itemsheet.png",{frameWidth:96,frameHeight:96});
+        
         
         
         
@@ -77,6 +85,7 @@ var gamePlayState = new Phaser.Class({
     {
         //帧率
         this.physics.world.setFPS(30);
+        
         //地图组
         this.mapGroup= this.physics.add.group();
         
@@ -84,33 +93,54 @@ var gamePlayState = new Phaser.Class({
         this.mapAddingGroup=this.physics.add.group();
         
         //人物组
-        this.sprite = this.physics.add.sprite(300, 300, 'player').setVelocity(0);
         
-        
-        this.sprite.setScale(0.12);
-        this.sprite.setDepth(1);
-        
-        //设置碰撞
-        //this.physics.add.collider(this.sprite,this.mapAddingGroup);
-        
-        //动画组
         this.anims.create({
           key:"player_right",
-          frames:[{key:"player"}],
+          frames:this.anims.generateFrameNumbers("player",{frames:[16,17,18,19]}),
+          frameRate:10,
+          repeat:-1
+        });
+        
+        this.anims.create({
+          key:"player_left",
+          frames:this.anims.generateFrameNumbers("player",{frames:[20,21,22,23]}),
+          frameRate:10,
+          repeat:-1
+        });
+        
+        this.anims.create({
+          key:"player_stand_left",
+          frames:this.anims.generateFrameNumbers("player",{frames:[4]}),
           frameRate:1,
-          repeat:1
+          repeat:-1
         });
       
         this.anims.create({
-          key:"player_left",
-          frames:[{key:"player_left"}],
+          key:"player_stand_right",
+          frames:this.anims.generateFrameNumbers("player",{frames:[0]}),
           frameRate:1,
-          repeat:1
+          repeat:-1
         });
+      
+        this.sprite = this.physics.add.sprite(300, 300, 'player').setVelocity(0);
+        this.sprite_tool = this.physics.add.sprite(300, 500, 'item').setVelocity(0);
+        this.sprite_tool.setScale(0.2);
+        this.sprite_tool.setDepth(20);
+        this.sprite.setBodySize(36,50,true);
+        
+        this.sprite.setScale(0.5);
+        this.sprite.setDepth(15);
+        
+        //设置碰撞
+        this.physics.add.collider(this.sprite,this.mapAddingGroup);
+        
+        
+        
+        
         
         //镜头跟随
         this.cameras.main.startFollow(this.sprite);
-        this.cameras.main.setZoom(1);
+        this.cameras.main.setZoom(sw/583.68);
         
         //摇杆插件
         this.joystick = this.add.joystick({
@@ -123,7 +153,7 @@ var gamePlayState = new Phaser.Class({
             maxDistanceInPixels: 100,
             device: 1 ,
             minx: 0,
-            maxx: 500
+            maxx: sw/2
         });
         //this.scale.startFullscreen();
 
@@ -131,6 +161,9 @@ var gamePlayState = new Phaser.Class({
 
     update: function ()
     {
+      
+       this.sprite_tool.x=this.sprite.x;
+       this.sprite_tool.y=this.sprite.y;
        for(delll=0;delll<hasLoadDic.length;delll++){
               getImportant(hasLoadDic[delll][0],hasLoadDic[delll][1],varbx,varby,delll);
        }
@@ -138,15 +171,25 @@ var gamePlayState = new Phaser.Class({
         var speed = 150;
         dx=this.joystick.deltaX;
         dy=this.joystick.deltaY;
+        
         if(!(dx==0&&dy==0)){
         sin=dy/Math.sqrt(dx**2+dy**2);
         cos=dx/Math.sqrt(dx**2+dy**2);
-        if(cos>=0){
-          this.sprite.play("player_right");
-        }else{this.sprite.play("player_left");}
+        
+            if(cos>=0){
+              
+              this.sprite.play("player_right",true);
+              dd=0;
+              
+            }else{this.sprite.play("player_left",true);dd=1;}
+        
         this.sprite.body.velocity.set(cos* speed,sin* speed);
         }else{
+        if(dd==0){
+            this.sprite.play("player_stand_right");
+        }else{this.sprite.play("player_stand_left");}
         this.sprite.body.velocity.set(0);
+        
         }
         
         //地图刷新
@@ -157,13 +200,14 @@ var gamePlayState = new Phaser.Class({
         varby=getblock(spx,spy)[1];
         
         //创世区块
+        
         if(!mapdic.hasOwnProperty("0/0")){
           createworldByblock(0,0);
           blockDraw(this.physics.add.group(),this.physics.add.group(),{
                x:0,
                y:0,
                block:mapdic["0/0"]
-            });
+            },this.mapAddingGroup);
           hasLoadDic.push([0,0]);
         }
         if(currentBlock!=previousBlock){
@@ -186,14 +230,14 @@ var gamePlayState = new Phaser.Class({
                x:checklist[i][0],
                y:checklist[i][1],
                block:mapdic[checklist[i][0]+"/"+checklist[i][1]]
-            });
+            },this.mapAddingGroup);
             
             //更新已加载区块
             hasLoadDic.push([checklist[i][0],checklist[i][1]]);
             
           }
           
-          //卸载不需要的区块(优化性能)
+          //卸载不需要的区块(优化性能)炒鸡重要！！！
           for(delll=0;delll<hasLoadDic.length;delll++){
               getImportant(hasLoadDic[delll][0],hasLoadDic[delll][1],varbx,varby,delll);
           }

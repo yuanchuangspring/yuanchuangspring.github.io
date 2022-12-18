@@ -95,8 +95,7 @@ var Joystick = new Phaser.Class({
         this.base=this.scene.add.sprite(0, 0, settings.sprites.base);
         this.body.setDepth(9);
         this.base.setDepth(9);
-        this.body.setScale(1.5);
-        this.base.setScale(1.5);
+        
         imageGroup.push(this.body);
         
         /**
@@ -174,18 +173,22 @@ var Joystick = new Phaser.Class({
         // Show sprites.
         this.layer.setVisible(true);
         this.layer.setDepth(10);
+        posx=sw/2+(pointer.x-sw/2)/1.4;
+        posy=sh/2+(pointer.y-sh/2)/1.4;
         this.layer.each(function (gameObject)
         {
             gameObject.setScrollFactor(0);
             
-            gameObject.x = pointer.x;
-            gameObject.y = pointer.y;
+            gameObject.x = posx;
+            gameObject.y = posy;
             
         }, this);
 
         // Set position of this Joystick to the pointer position.
         
-        this.setPosition(pointer.x, pointer.y);
+        
+        this.setPosition(posx, posy);
+        
         
         
         }
@@ -235,8 +238,8 @@ var Joystick = new Phaser.Class({
         var pointer = pointers[this.device].position;
         
         // Compute delta pointer position.
-        var deltaX = pointer.x - this.x;
-        var deltaY = pointer.y - this.y;
+        var deltaX = sw/2+(pointer.x-sw/2)/1.4 - this.x;
+        var deltaY = sh/2+(pointer.y-sh/2)/1.4 - this.y;
         
         //
         var dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
