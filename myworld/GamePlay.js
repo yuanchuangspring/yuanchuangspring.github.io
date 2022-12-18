@@ -123,16 +123,19 @@ var gamePlayState = new Phaser.Class({
         });
       
         this.sprite = this.physics.add.sprite(300, 300, 'player').setVelocity(0);
-        this.sprite_tool = this.physics.add.sprite(300, 500, 'item').setVelocity(0);
-        this.sprite_tool.setScale(0.2);
+        this.sprite_tool = this.physics.add.sprite(290, 300, 'item').setVelocity(0);
+        this.sprite_tool.setFrame(162);
+        this.sprite_tool.setFlipX(true);
         this.sprite_tool.setDepth(20);
         this.sprite.setBodySize(36,50,true);
-        
+        this.sprite_tool.setBodySize(190,125,true);
+        this.sprite_tool.setScale(0.2);
         this.sprite.setScale(0.5);
-        this.sprite.setDepth(15);
+        this.sprite.setDepth(5);
         
         //设置碰撞
         this.physics.add.collider(this.sprite,this.mapAddingGroup);
+        this.physics.add.collider(this.sprite_tool,this.mapAddingGroup);
         
         
         
@@ -153,7 +156,8 @@ var gamePlayState = new Phaser.Class({
             maxDistanceInPixels: 100,
             device: 1 ,
             minx: 0,
-            maxx: sw/2
+            maxx: sw/2,
+            worldZoom:sw/583.68
         });
         //this.scale.startFullscreen();
 
@@ -161,13 +165,12 @@ var gamePlayState = new Phaser.Class({
 
     update: function ()
     {
-      
-       this.sprite_tool.x=this.sprite.x;
-       this.sprite_tool.y=this.sprite.y;
+       
+       
        for(delll=0;delll<hasLoadDic.length;delll++){
               getImportant(hasLoadDic[delll][0],hasLoadDic[delll][1],varbx,varby,delll);
        }
-        //设置速度 联动摇杆
+        //设置速度 联动摇杆(屎山)
         var speed = 150;
         dx=this.joystick.deltaX;
         dy=this.joystick.deltaY;
@@ -179,18 +182,31 @@ var gamePlayState = new Phaser.Class({
             if(cos>=0){
               
               this.sprite.play("player_right",true);
+              this.sprite_tool.setFlipX(true);
+              this.sprite_tool.setPosition(this.sprite.x-10,this.sprite.y);
               dd=0;
               
-            }else{this.sprite.play("player_left",true);dd=1;}
+            }else{this.sprite.play("player_left",true);dd=1;this.sprite_tool.setFlipX(false);
+            this.sprite_tool.setPosition(this.sprite.x+10,this.sprite.y);}
         
         this.sprite.body.velocity.set(cos* speed,sin* speed);
+        this.sprite_tool.body.velocity.set(cos* speed,sin* speed);
         }else{
         if(dd==0){
             this.sprite.play("player_stand_right");
-        }else{this.sprite.play("player_stand_left");}
-        this.sprite.body.velocity.set(0);
+            
+        }else{this.sprite.play("player_stand_left");
         
         }
+        this.sprite.body.velocity.set(0);
+        this.sprite_tool.body.velocity.set(0);
+        
+        }
+      
+      
+      
+      
+      
         
         //地图刷新
         spx=this.sprite.x;
@@ -243,6 +259,7 @@ var gamePlayState = new Phaser.Class({
           }
         
         }
+      
     }
     //update end...
     

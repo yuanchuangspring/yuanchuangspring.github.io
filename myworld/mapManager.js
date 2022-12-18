@@ -104,7 +104,7 @@ function blockDraw(obj,obj2,data,group){
         
         ind_adding=obj2.create(x,y,data.block[drawnnn][1].key);
         ind_adding.setScale(0.12);
-        ind_adding.setDepth(1);
+        ind_adding.setDepth(10);
         if(data.block[drawnnn][1].collide.length==2){
             ind_adding.setBodySize(data.block[drawnnn][1].collide[0],data.block[drawnnn][1].collide[1],true);
         }
