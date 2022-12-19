@@ -5,6 +5,11 @@ var hasLoadDic=[];
 var objlist=[];
 var hasToLoadDic=[];
 var dd=0;
+//都是item引擎需要的magic number
+var pzx;
+var mavar;
+var pzxgroupvar;
+
 
 var gamePlayState = new Phaser.Class({
   
@@ -74,6 +79,8 @@ var gamePlayState = new Phaser.Class({
         //item 物品加载
         this.load.spritesheet("item","assets/items/itemsheet.png",{frameWidth:96,frameHeight:96});
         
+        //pzx加载
+        this.load.image("pzx","assets/pzx.png");
         
         
         
@@ -84,7 +91,7 @@ var gamePlayState = new Phaser.Class({
     create: function ()
     {
         //帧率
-        this.physics.world.setFPS(30);
+        this.physics.world.setFPS(60);
         
         //地图组
         this.mapGroup= this.physics.add.group();
@@ -123,16 +130,15 @@ var gamePlayState = new Phaser.Class({
         });
       
         this.sprite = this.physics.add.sprite(300, 300, 'player').setVelocity(0);
-        tool_obj=new ItemCollectTool(this.physics,"item");
-        this.sprite_tool=tool_obj.item;
+        
         this.sprite.setBodySize(36,50,true);
         
         this.sprite.setScale(0.5);
         this.sprite.setDepth(5);
         
+        this.add.existing(new ItemCollectTool(this,300,300,"item"));
         //设置碰撞
         this.physics.add.collider(this.sprite,this.mapAddingGroup);
-        this.physics.add.collider(this.sprite_tool,this.mapAddingGroup);
         
         
         
@@ -195,15 +201,13 @@ var gamePlayState = new Phaser.Class({
             if(cos>=0){
               
               this.sprite.play("player_right",true);
-              this.sprite_tool.setFlipX(true);
-              this.sprite_tool.setPosition(this.sprite.x-10,this.sprite.y);
-              dd=0;
+                   dd=0;
               
-            }else{this.sprite.play("player_left",true);dd=1;this.sprite_tool.setFlipX(false);
-            this.sprite_tool.setPosition(this.sprite.x+10,this.sprite.y);}
-        
+            }else{this.sprite.play("player_left",true);dd=1;}
+            
         this.sprite.body.velocity.set(cos* speed,sin* speed);
-        this.sprite_tool.body.velocity.set(cos* speed,sin* speed);
+        
+        
         }else{
         if(dd==0){
             this.sprite.play("player_stand_right");
@@ -212,18 +216,16 @@ var gamePlayState = new Phaser.Class({
         
         }
         this.sprite.body.velocity.set(0);
-        this.sprite_tool.body.velocity.set(0);
+        
         
         }
-      
-      
-      
-      
+        //20221217发现bug
       
         
         //地图刷新
         spx=this.sprite.x;
         spy=this.sprite.y;
+        
         currentBlock=getblock(spx,spy)[2];
         varbx=getblock(spx,spy)[0];
         varby=getblock(spx,spy)[1];

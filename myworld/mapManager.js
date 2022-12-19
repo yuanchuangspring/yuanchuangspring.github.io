@@ -30,6 +30,7 @@ function createworld(x,y){
          for(addnum=0;addnum<TYPE.addtion.length;addnum++){
              if(Random(0,1)<=TYPE.addtion[addnum].value){
                adding.key=TYPE.addtion[addnum].key;
+               adding.life=TYPE.addtion[addnum].life;
                if(TYPE.addtion[addnum].hasOwnProperty("collide")){adding.collide=TYPE.addtion[addnum].collide;}
              }
          }

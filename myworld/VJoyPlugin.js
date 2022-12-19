@@ -240,7 +240,7 @@ var Joystick = new Phaser.Class({
         // Retrieve player input pointers.
         
         var pointers = this.scene.sys.input.manager.pointers;
-        console.log(pointers);
+       
         // Get pointer corresponding to used device.
         var pointer = pointers[this.device+this.id-1].position;
         
