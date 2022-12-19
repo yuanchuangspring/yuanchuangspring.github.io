@@ -61,7 +61,7 @@ function createworldByblock(bx,by){
              }
          }
       }
-      console.log(adding);
+      
       mapdic[bx+"/"+by].push([TYPE.main+"_tile",adding]);
       
     }

@@ -123,13 +123,10 @@ var gamePlayState = new Phaser.Class({
         });
       
         this.sprite = this.physics.add.sprite(300, 300, 'player').setVelocity(0);
-        this.sprite_tool = this.physics.add.sprite(290, 300, 'item').setVelocity(0);
-        this.sprite_tool.setFrame(162);
-        this.sprite_tool.setFlipX(true);
-        this.sprite_tool.setDepth(20);
+        tool_obj=new ItemCollectTool(this.physics,"item");
+        this.sprite_tool=tool_obj.item;
         this.sprite.setBodySize(36,50,true);
-        this.sprite_tool.setBodySize(190,125,true);
-        this.sprite_tool.setScale(0.2);
+        
         this.sprite.setScale(0.5);
         this.sprite.setDepth(5);
         
@@ -159,6 +156,22 @@ var gamePlayState = new Phaser.Class({
             maxx: sw/2,
             worldZoom:sw/583.68
         });
+        this.input.addPointer();
+        this.joystick1 = this.add.joystick({
+            sprites: {
+                base: 'vjoy_base',
+                body: 'vjoy_body',
+                cap: 'vjoy_cap'
+            },
+            singleDirection: false,
+            maxDistanceInPixels: 100,
+            device: 1 ,
+            minx: sw/2,
+            maxx: sw,
+            worldZoom:sw/583.68
+        });
+      
+      
         //this.scale.startFullscreen();
 
     },

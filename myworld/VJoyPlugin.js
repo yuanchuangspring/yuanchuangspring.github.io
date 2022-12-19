@@ -58,7 +58,7 @@ var Joystick = new Phaser.Class({
          * @type {Phaser.Math.Vector2}
          */
         this.cursors = new Phaser.Math.Vector2(0, 0);
-
+        this.id=0;
         /**
          * [description]
          *
@@ -94,8 +94,8 @@ var Joystick = new Phaser.Class({
         var imageGroup = [];
         this.body=this.scene.add.sprite(0, 0, settings.sprites.body);
         this.base=this.scene.add.sprite(0, 0, settings.sprites.base);
-        this.body.setDepth(9);
-        this.base.setDepth(9);
+        this.body.setDepth(20);
+        this.base.setDepth(20);
         
         imageGroup.push(this.body);
         
@@ -110,6 +110,7 @@ var Joystick = new Phaser.Class({
 
         // Manage the Joystick sprites with a Layer.
         this.layer = this.scene.add.layer(imageGroup);
+        this.layer.setDepth(20);
         this.layer.setVisible(false);
 
         // Set Joystick position to (0, 0).
@@ -119,8 +120,8 @@ var Joystick = new Phaser.Class({
         this.setActive(false);
 
         // Add input callback on the current scene.
-        this.scene.input.on(Phaser.Input.Events.POINTER_DOWN, this.onKeyDown, this);
-        this.scene.input.on(Phaser.Input.Events.POINTER_UP, this.onKeyUp, this);
+        this.scene.input.on("pointerdown", this.onKeyDown,this);
+        this.scene.input.on("pointerup", this.onKeyUp, this);
 
         // Add current Joystick to the scene, it will be added to the Update List.
         this.scene.add.existing(this);
@@ -165,9 +166,10 @@ var Joystick = new Phaser.Class({
      */
     onKeyDown: function (pointer)
     {
+        
         if(pointer.x>=this.minx && pointer.x<=this.maxx){
         
-
+        this.id=pointer.id;
         // Enable update logic of this Joystick.
         this.setActive(true);
 
@@ -193,6 +195,7 @@ var Joystick = new Phaser.Class({
         
         
         }
+      
     },
 
     /**
@@ -206,7 +209,7 @@ var Joystick = new Phaser.Class({
     {
         
         
-        
+        if((pointer.x>=this.minx && pointer.x<=this.maxx)&&pointer.id==this.id){
         // Disable update logic of this Joystick.
         this.setActive(false);
 
@@ -215,6 +218,8 @@ var Joystick = new Phaser.Class({
 
         // Reset cursors position.
         this.cursors = new Phaser.Math.Vector2(0, 0);
+        this.id=0;
+        }
         
     },
 
@@ -231,12 +236,13 @@ var Joystick = new Phaser.Class({
     preUpdate: function (time, delta)
     {
         
-
-        // Retrieve player input pointers.
-        var pointers = this.scene.sys.input.manager.pointers;
         
+        // Retrieve player input pointers.
+        
+        var pointers = this.scene.sys.input.manager.pointers;
+        console.log(pointers);
         // Get pointer corresponding to used device.
-        var pointer = pointers[this.device].position;
+        var pointer = pointers[this.device+this.id-1].position;
         
         // Compute delta pointer position.
         var deltaX = sw/2+(pointer.x-sw/2)/this.zoom - this.x;
@@ -278,6 +284,7 @@ var Joystick = new Phaser.Class({
             gameObject.y = this.y + (deltaY) * index / 3;
             index++;
         }, this);
+      
     }
 });
 
