@@ -4,6 +4,8 @@
 *20221218
 */
 
+var ifButtonDown=[];
+
 var ItemCollectTool = new Phaser.Class({
     Extends:Phaser.Physics.Arcade.Sprite,
     initialize:function ItemCollectTool(scene,x,y,texture){
@@ -27,6 +29,8 @@ var ItemCollectTool = new Phaser.Class({
         
     },
     preUpdate(time,delta){
+        sin=0;
+        cos=0;
         speed=150;
         dx=this.scene.joystick.deltaX;
         dy=this.scene.joystick.deltaY;
@@ -38,11 +42,11 @@ var ItemCollectTool = new Phaser.Class({
               this.setFlipX(true);
               
               dd=0;this.setOrigin(0,1);
-              this.setPosition(this.scene.sprite.x,this.scene.sprite.y);
+              this.setPosition(this.scene.sprite.x,this.scene.sprite.y+10);
               this.setOrigin(0.75,1);
               
             }else{dd=1;this.setOrigin(1,1);this.setFlipX(false);
-            this.setPosition(this.scene.sprite.x,this.scene.sprite.y);
+            this.setPosition(this.scene.sprite.x,this.scene.sprite.y+10);
             this.setOrigin(0.25,1);
         
             }
@@ -55,17 +59,11 @@ var ItemCollectTool = new Phaser.Class({
         
         }
       
-        dx1=this.scene.joystick1.deltaX;
-        dy1=this.scene.joystick1.deltaY;
-        if(!(dx1==0&&dy1==0)){
-          
-            sin1=dy1/Math.sqrt(dx1**2+dy1**2);
-            cos1=dx1/Math.sqrt(dx1**2+dy1**2);
-            //666资源采集引擎
-            if(cos1<=0 && this.angle==0){
-            this.scene.tweens.timeline({
+        if(ifButtonDown.indexOf("collect")!=-1 && this.angle==0){
+          if(!this.flipX){
+          this.scene.tweens.timeline({
                targets: this,
-               onComplete:this.pzxCheck,
+             
                tweens:[
                  {
                    angle: 50,
@@ -88,17 +86,11 @@ var ItemCollectTool = new Phaser.Class({
                  }
                ]
             });
-          pzx=this.scene.physics.add.sprite(this.scene.sprite.x-30,this.scene.sprite.y,"pzx");
-          pzx.setScale(0.1);
-          this.pzxgroup.add(pzx);
-          this.scene.physics.add.collider(this.pzxgroup,this.scene.mapAddingGroup,function (pz,ma){pz.destroy();mavar=ma;setTimeout("mavar.destroy()",160);});
-          pzxgroupvar=this.pzxgroup;
-            
-          }else{
-              if(this.angle==0){
-              this.scene.tweens.timeline({
+           
+        }else{
+            this.scene.tweens.timeline({
                targets: this,
-               onComplete:this.pzxCheck,
+               
                tweens:[
                  {
                    angle: -50,
@@ -121,18 +113,35 @@ var ItemCollectTool = new Phaser.Class({
                  }
                ]
             });
-          pzx=this.scene.physics.add.sprite(this.scene.sprite.x+30,this.scene.sprite.y,"pzx");
-          pzx.setScale(0.1);
-          this.pzxgroup.add(pzx);
-          this.scene.physics.add.collider(this.pzxgroup,this.scene.mapAddingGroup,function (pz,ma){pz.destroy();mavar=ma;setTimeout("mavar.destroy()",160);});
-          pzxgroupvar=this.pzxgroup;
-            
-          }
           
-          }
+          
         }
-      setTimeout(function (){c(pzxgroupvar);},500);
-    },
+       //这里后面要改参数，即破坏能力
+            closestAdding.life=closestAdding.life-1;
+            this.scene.tweens.timeline({
+               targets: closestAdding,
+               
+               tweens:[
+                 {
+                   scale: 0.09,
+                   duration: 60,
+                   callbackScope: this.scene,
+                   ease: 'Linear'
+                 },
+                 
+                
+                 {
+                   scale: 0.12,
+                   duration: 60,
+                   callbackScope: this.scene,
+                   ease: 'Linear'
+                 }
+               ]
+            });
+            if(closestAdding.life<=0){closestAdding.destroy();}
+      }
+      
+    }
 
 
    

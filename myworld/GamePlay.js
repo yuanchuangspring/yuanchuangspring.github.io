@@ -10,6 +10,8 @@ var pzx;
 var mavar;
 var pzxgroupvar;
 
+var closestAdding="";
+var collideAdding=[];
 
 var gamePlayState = new Phaser.Class({
   
@@ -141,6 +143,17 @@ var gamePlayState = new Phaser.Class({
         this.physics.add.collider(this.sprite,this.mapAddingGroup);
         
         
+        this.pzx=this.physics.add.sprite(this.sprite.x,this.sprite.y,"pzx");
+        this.pzx.setScale(0.8);
+        
+        this.physics.add.overlap(this.pzx, this.mapAddingGroup, function (pz,ma){
+            
+            if(collideAdding.indexOf(ma)==-1){
+                collideAdding.push(ma);
+            }
+          
+        }, null, this);
+        
         
         
         
@@ -185,7 +198,7 @@ var gamePlayState = new Phaser.Class({
     update: function ()
     {
        
-       
+       this.pzx.setPosition(this.sprite.x,this.sprite.y);
        for(delll=0;delll<hasLoadDic.length;delll++){
               getImportant(hasLoadDic[delll][0],hasLoadDic[delll][1],varbx,varby,delll);
        }
@@ -274,8 +287,32 @@ var gamePlayState = new Phaser.Class({
           }
         
         }
-      
+        mindis=205;
+        minitem="";
+        for(collideitem=0;collideitem<collideAdding.length;collideitem++){
+              
+              collideAdding[collideitem].clearTint();
+              if(Phaser.Math.Distance.Between(collideAdding[collideitem].x,collideAdding[collideitem].y,this.sprite.x,this.sprite.y)>205){
+                collideAdding.splice(collideitem,1);
+              }else{
+                
+                if(Phaser.Math.Distance.Between(collideAdding[collideitem].x,collideAdding[collideitem].y,this.sprite.x,this.sprite.y)<mindis){
+                  
+                  
+                  mindis=Phaser.Math.Distance.Between(collideAdding[collideitem].x,collideAdding[collideitem].y,this.sprite.x,this.sprite.y);
+                  minitem=collideAdding[collideitem];
+                }
+                
+              }
+              closestAdding=minitem;
+        }
+        if(closestAdding!=""){
+          closestAdding.setTintFill(0xffffff);
+        }
+        //开采
+        
     }
+    
     //update end...
     
     

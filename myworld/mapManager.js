@@ -58,11 +58,11 @@ function createworldByblock(bx,by){
          for(addnum=0;addnum<TYPE.addtion.length;addnum++){
              if(Random(0,1)<=TYPE.addtion[addnum].value){
                adding.key=TYPE.addtion[addnum].key;
+               adding.life=TYPE.addtion[addnum].life;
                if(TYPE.addtion[addnum].hasOwnProperty("collide")){adding.collide=TYPE.addtion[addnum].collide;}
              }
          }
       }
-      
       mapdic[bx+"/"+by].push([TYPE.main+"_tile",adding]);
       
     }
@@ -113,6 +113,7 @@ function blockDraw(obj,obj2,data,group){
             ind_adding.setBodySize(1,1,true);
         }
         ind_adding.setPushable(false);
+        ind_adding.life=data.block[drawnnn][1].life*3;
         group.add(ind_adding);
         
         }

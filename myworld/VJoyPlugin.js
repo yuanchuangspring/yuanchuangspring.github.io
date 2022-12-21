@@ -94,8 +94,8 @@ var Joystick = new Phaser.Class({
         var imageGroup = [];
         this.body=this.scene.add.sprite(0, 0, settings.sprites.body);
         this.base=this.scene.add.sprite(0, 0, settings.sprites.base);
-        this.body.setDepth(20);
-        this.base.setDepth(20);
+        this.body.setDepth(200);
+        this.base.setDepth(200);
         
         imageGroup.push(this.body);
         
