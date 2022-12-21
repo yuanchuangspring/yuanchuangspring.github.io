@@ -23,13 +23,17 @@ var gamePlayState = new Phaser.Class({
     function GamePlay ()
     {
         Phaser.Scene.call(this, {
-            key: 'GamePlay'
+            key: 'GamePlay',
+            active:false
         });
     },
 
     preload: function ()
     {
         //资源加载进度条
+        //this.load.image("bg","assets/ui/bg.png");
+        //var bg=this.add.image(sw/2,sh/2,"bg");
+        //bg.setScale(sw/128);
         var progress = this.add.graphics();
         var pro_text = this.add.text(sw/2-50,sh/2-100,"资源加载中...");
 
@@ -43,6 +47,7 @@ var gamePlayState = new Phaser.Class({
 
         this.load.on('complete', function () {
             pro_text.destroy();
+            //bg.destroy();
             progress.destroy();
 
         });
@@ -83,6 +88,8 @@ var gamePlayState = new Phaser.Class({
         
         //pzx加载
         this.load.image("pzx","assets/pzx.png");
+        
+        
         
         
         

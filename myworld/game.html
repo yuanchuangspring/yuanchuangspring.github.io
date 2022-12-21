@@ -4,17 +4,19 @@
 <head lang="en">
   <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-  <title>myWorld-DEMO</title>
+  <title>无限开拓</title>
   <script src="./libs/phaser3.55.2/phaser.js"></script>
   <script src="./libs/GlobalVariables.js"></script>
   <script src="./libs/jquery.js"></script>
   <script src="mapManager.js"></script>
+  <script src="gameBegin.js"></script>
   <script src="GamePlay.js"></script>
   <script src="./libs/perlin.js"></script>
   <script src="areaConfig.js"></script>
   <script src="gameSupport.js"></script>
   <script src="itemManager.js"></script>
   <script src="gameUI.js"></script>
+  
 </head>
 
 <style>
@@ -42,8 +44,15 @@
   sh=window.screen.height;
   
   
-    console.clear()
     
+    //if(window.localStorage.getItem("user_name")==null || window.localStorage.getItem("user_name")=="null"){
+        //var userName=prompt("初次见面,请问您的昵称是：");
+        
+        //window.localStorage.setItem("user_name",userName);
+    //}else{
+        //var userName=window.localStorage.getItem("user_name");
+        //alert("欢迎回来,"+window.localStorage.getItem("user_name"));
+    //}
     //On page load, create game config
     var config = {
       type: Phaser.AUTO,
@@ -61,7 +70,7 @@
         arcade: { debug: false }
       },
       pixelArt: true,
-      antialias: false,
+      antialias: true,
       render: {
         roundPixels: true,
       },

@@ -8,7 +8,7 @@ var gameUI = new Phaser.Class({
 
     function gameUI ()
     {
-        Phaser.Scene.call(this, { key: 'gameUI', active: true });
+        Phaser.Scene.call(this, { key: 'gameUI',active:false });
 
         
     },
