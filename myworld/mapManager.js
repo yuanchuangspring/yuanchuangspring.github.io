@@ -24,14 +24,14 @@ function createworld(x,y){
       noiWAT=noise.perlin2(noiTEM,noise.perlin2(noiy,noix));
       TYPE=areaConfig[getType(noiTEM,noiWAT)];
       //进行地面附着物生成
-      adding={key:"",collide:[]};
+      adding={};
       
       if(TYPE.addtion.hasOwnProperty(0)){
          for(addnum=0;addnum<TYPE.addtion.length;addnum++){
              if(Random(0,1)<=TYPE.addtion[addnum].value){
-               adding.key=TYPE.addtion[addnum].key;
-               adding.life=TYPE.addtion[addnum].life;
-               if(TYPE.addtion[addnum].hasOwnProperty("collide")){adding.collide=TYPE.addtion[addnum].collide;}
+               adding=TYPE.addtion[addnum].item;
+               
+               
              }
          }
       }
@@ -52,14 +52,14 @@ function createworldByblock(bx,by){
       noiWAT=noise.perlin2(noiTEM,noise.perlin2(noiy,noix));
       TYPE=areaConfig[getType(noiTEM,noiWAT)];
       //进行地面附着物生成
-      adding={key:"",collide:[]};
+      adding={};
       
       if(TYPE.addtion.hasOwnProperty(0)){
          for(addnum=0;addnum<TYPE.addtion.length;addnum++){
              if(Random(0,1)<=TYPE.addtion[addnum].value){
-               adding.key=TYPE.addtion[addnum].key;
-               adding.life=TYPE.addtion[addnum].life;
-               if(TYPE.addtion[addnum].hasOwnProperty("collide")){adding.collide=TYPE.addtion[addnum].collide;}
+               adding=TYPE.addtion[addnum].item;
+               
+               
              }
          }
       }
@@ -101,19 +101,23 @@ function blockDraw(obj,obj2,data,group){
         ind.setScale(1.92);
         ind.setDepth(0);
         
-        if(data.block[drawnnn][1].key!=""){
+        if(data.block[drawnnn][1].hasOwnProperty("key")){
         
         ind_adding=obj2.create(x,y,data.block[drawnnn][1].key);
         ind_adding.setScale(0.12);
         ind_adding.setDepth(10);
+        if(data.block[drawnnn][1].hasOwnProperty("collide")){
         if(data.block[drawnnn][1].collide.length==2){
             ind_adding.setBodySize(data.block[drawnnn][1].collide[0],data.block[drawnnn][1].collide[1],true);
         }
         if(data.block[drawnnn][1].collide.length==1){
             ind_adding.setBodySize(1,1,true);
         }
+        }
         ind_adding.setPushable(false);
-        ind_adding.life=data.block[drawnnn][1].life*3;
+        ind_adding.life=data.block[drawnnn][1].life;
+        ind_adding.bargin=data.block[drawnnn][1].bargin;
+        
         group.add(ind_adding);
         
         }

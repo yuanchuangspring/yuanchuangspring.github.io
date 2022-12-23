@@ -1,4 +1,4 @@
-var mapdic=[];
+var mapdic={};
 var previousBlock="";
 var currentBlock="";
 var hasLoadDic=[];
@@ -12,6 +12,17 @@ var pzxgroupvar;
 
 var closestAdding="";
 var collideAdding=[];
+//真是写了yituodabian，没脸看了
+var playerBag={};
+var playerBagConfig={};
+//提示文本
+var tipText;
+//背包启动按钮
+var bagButton;
+
+var spriteX=0;
+var spriteY=0;
+var saveInterval
 
 var gamePlayState = new Phaser.Class({
   
@@ -107,7 +118,8 @@ var gamePlayState = new Phaser.Class({
         
         //附着物组
         this.mapAddingGroup=this.physics.add.group();
-        
+        //掉落物组
+        this.dropThingGroup=this.physics.add.group();
         //人物组
         
         this.anims.create({
@@ -137,21 +149,36 @@ var gamePlayState = new Phaser.Class({
           frameRate:1,
           repeat:-1
         });
-      
+        
+
         this.sprite = this.physics.add.sprite(300, 300, 'player').setVelocity(0);
         
         this.sprite.setBodySize(36,50,true);
         
         this.sprite.setScale(0.5);
-        this.sprite.setDepth(5);
+        this.sprite.setDepth(8);
         
         this.add.existing(new ItemCollectTool(this,300,300,"item"));
         //设置碰撞
         this.physics.add.collider(this.sprite,this.mapAddingGroup);
+        this.physics.add.overlap(this.sprite,this.dropThingGroup,function (me,it){
+            if(playerBag.hasOwnProperty(it.itemdata.name)){
+                playerBag[it.itemdata.name]+=1;
+                
+            }else{playerBag[it.itemdata.name]=1;playerBagConfig[it.itemdata.name]=it.itemdata;}
+            tipText.setText("获得"+it.itemdata.name+",当前数量:"+playerBag[it.itemdata.name]);
+            setTimeout(
+            "tipText.setText('')",
+            3000
+            );
+            it.destroy();
+            
+            
+        });
         
         
         this.pzx=this.physics.add.sprite(this.sprite.x,this.sprite.y,"pzx");
-        this.pzx.setScale(0.8);
+        this.pzx.setScale(0.4);
         
         this.physics.add.overlap(this.pzx, this.mapAddingGroup, function (pz,ma){
             
@@ -196,8 +223,11 @@ var gamePlayState = new Phaser.Class({
             maxx: sw,
             worldZoom:sw/583.68
         });
-      
-      
+        
+        //保存循环
+        if(isApp==true){
+            saveInterval=setInterval(function (){console.log("正在保存...");save("ss",mapdic,spriteX,spriteY,external_seed,playerBag,playerBagConfig);},10000);
+        }
         //this.scale.startFullscreen();
 
     },
@@ -294,7 +324,7 @@ var gamePlayState = new Phaser.Class({
           }
         
         }
-        mindis=205;
+        mindis=128;
         minitem="";
         for(collideitem=0;collideitem<collideAdding.length;collideitem++){
               
@@ -316,7 +346,10 @@ var gamePlayState = new Phaser.Class({
         if(closestAdding!=""){
           closestAdding.setTintFill(0xffffff);
         }
-        //开采
+        spriteX=this.sprite.x;
+        spriteY=this.sprite.y;
+        
+        
         
     }
     

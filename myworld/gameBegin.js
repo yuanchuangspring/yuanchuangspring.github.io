@@ -1,3 +1,30 @@
+var isApp=true;
+
+function save(filenum,mapdata,x,y,seed,bagdata,bagconfig){
+    savedata={
+      mapsave:mapdata,
+      xsave:x,
+      ysave:y,
+      seedsave:seed,
+      bagsave:bagdata,
+      bagsaveconfig:bagconfig
+    }
+    savejson=JSON.stringify(savedata);
+    strrr="";
+    for(savei=0;savei<savejson.length;savei++){
+      if(savejson[savei]=='"'){
+          strrr=strrr+"/";
+      }else{strrr=strrr+savejson[savei];}
+    }
+    wc.write("UnlimitedDevelopment/save/"+filenum,strrr);
+    
+}
+
+function cFile(pathnamex){
+    wc.write(pathnamex+"/create.json","create");
+    wc.delFile(pathnamex+"/create.json");
+}
+
 var GameBegin = new Phaser.Class({
   
     
@@ -22,7 +49,14 @@ var GameBegin = new Phaser.Class({
         
     },
     create:function(){
-        
+        if(isApp==true){
+          if(!wc.isDir("UnlimitedDevelopment")){
+            wc.alert("文件初始化");
+            cFile("UnlimitedDevelopment");
+            cFile("UnlimitedDevelopment/save");
+            cFile("UnlimitedDevelopment/mod");
+          }
+        }
         
         this.bg=this.add.image(sw/2,sh/2,"bg");
         
@@ -34,7 +68,7 @@ var GameBegin = new Phaser.Class({
         
         this.start=this.add.sprite(sw/2,sh/2+(sw*4/16)/899*288/2,"but_start");
         this.start.setScale((sw*4/16)/899);
-        this.start.setInteractive()
+        this.start.setInteractive();
         this.start.on("pointerdown",function (pointer){this.scene.start("GamePlay");this.scene.start("gameUI");},this);    
         
         
