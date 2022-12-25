@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <title>myWorld-DEMO</title>
+  <script src="./libs/phaser3.55.2/phaser.js"></script>
+  <script src="./libs/GlobalVariables.js"></script>
+  <script src="./libs/jquery.js"></script>
+  <script src="GamePlay.js"></script>
+  <script src="./libs/perlin.js"></script>
+  <script src="mapManager.js"></script>
+  <script src="cardManager.js"></script>
+  <script src="animationManager.js"></script>
+  
+</head>
+
+<style>
+    body{
+      background-color:#1A1B1C;
+    }
+    #game {
+        width: 100%;
+        height: 100%;
+        margin-top:-8px;
+        background-color: black;
+        
+    }
+    #rotation{
+      width: 100%;
+      
+    }
+  
+</style>
+
+<body>
+  <div id="game"></div>
+  <script>
+  var sw=window.screen.width;
+  var sh=window.screen.height;
+  
+  
+    console.clear()
+    
+    //On page load, create game config
+    var config = {
+      type: Phaser.AUTO,
+      parent:"game",
+      backgroundColor:"#ac8863",
+      scale: {
+         mode: Phaser.Scale.ENVELOP,
+         autoCenter: Phaser.Scale.CENTER_BOTH,
+         width: sw,
+         height: sh+10,
+      },
+      
+      physics: {
+        default: 'arcade',
+        arcade: { debug: false }
+      },
+      pixelArt: true,
+      antialias: false,
+      roundPixels: true,
+     
+     
+      scene: myGame.scenes
+    };
+
+    //Instantiate the game with the config
+    var game = new Phaser.Game(config);
+  
+  </script>
+</body>
+
+</html>
