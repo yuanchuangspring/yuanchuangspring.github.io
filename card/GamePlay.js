@@ -1,3 +1,6 @@
+
+var isjiesuan=false;
+
 var mapdic=[];
 var init=false;
 var current_card=[];
@@ -50,13 +53,14 @@ var gamePlayState = new Phaser.Class({
 
     preload: function ()
     {
+        
         //背景色设置
         
         
         
         //资源加载进度条
         var progress = this.add.graphics();
-        var pro_text = this.add.text(sw/2-50,sh/2-100,"资源加载中...",{fontSize: '30px', fontFamily:"font1"});
+        //var pro_text = this.add.text(sw/2-50,sh/2-100,"资源加载中...",{fontSize: '30px', fontFamily:"font1"});
 
         this.load.on('progress', function (value) {
 
@@ -67,8 +71,8 @@ var gamePlayState = new Phaser.Class({
         });
 
         this.load.on('complete', function () {
-            console.log(1);
-            pro_text.destroy();
+            
+            //pro_text.destroy();
             progress.destroy();
 
         });
@@ -111,7 +115,10 @@ var gamePlayState = new Phaser.Class({
 
     create: function ()
     {
-        paiku=[qishi,maoweapon,dunweapon,clockweapon];
+      current_card=[];
+        $("#canvas").css("left","50000px");
+        //this.scene.start("GameJiesuan");
+        paiku=[clockweapon,qishi,qishi,qishi,maoweapon,maoweapon,judun,judun,dunwei,dunwei,dunwei,qishi,qishi,qishi];
         bossddd=shilaimu;
         //帧率
         this.physics.world.setFPS(60);
@@ -145,6 +152,7 @@ var gamePlayState = new Phaser.Class({
           
         });
         boss.life=bossddd.life;
+        boss.coin=bossddd.coin;
         boss.fullLife=bossddd.life;
       
         postButton=this.add.text(sw/2,sh/16*3+200*0.6+60,"来吧!(结束本回合)",{ 
@@ -159,6 +167,12 @@ var gamePlayState = new Phaser.Class({
         postButton.setInteractive();
         postButton.on("pointerdown",function (){
             if(postButton.alpha!=0.5){
+              
+              for(fff=0;fff<current_card.length;fff++){
+                  qipaiku.push(current_card[fff].cardData);
+                  moveToPointX(boss.scene,current_card[fff],-0.5*sw,500,false,function (){this.targets[0].destroy();});
+              }
+              current_card=[];
               postButton.setAlpha(0.5);
               takeEffect(this);
               
@@ -205,7 +219,7 @@ var gamePlayState = new Phaser.Class({
         //bg设置
         this.add.sprite(sw/2,boss_tipText.y+sw/1346*540-15,"woodboard").setScale(sw/1346).setDepth(-1);
         
-        updateUIloop();
+       updateUIloop();
 
     },
 

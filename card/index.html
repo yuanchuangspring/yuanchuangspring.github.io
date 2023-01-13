@@ -16,7 +16,8 @@
   <script src="animationManager.js"></script>
   <script src="cardConfig.js"></script>
   <script src="gameMap.js"></script>
-  
+  <script src="gameJiesuan.js"></script>
+  <script src="gameFire.js"></script>
 <link rel="stylesheet" type="text/css" href="stsmapgen-master/button.css" />
    
   <script src="./stsmapgen-master/p5.js"></script>
@@ -25,7 +26,7 @@
   <script src="./stsmapgen-master/delaunator.min.js"></script>
   <script src="./stsmapgen-master/ngraph.graph.min.js"></script>
   <script src="./stsmapgen-master/ngraph.path.min.js"></script>
-  
+  <script src="./yellowtip.js"></script>
   
 </head>
 
@@ -60,6 +61,10 @@
   <div style="color:#ffffff;font-family:font1; position:absolute; left:-100000px">你好</div>
   <div id="game" style="font-family:font1;"></div>
   <script>
+  var pathListCache=[];
+  var cardtotal=[kelong,yisheng,jiaolian,clockweapon,judun];
+  
+  
   var sw=window.screen.width;
   var sh=window.screen.height;
   $('body').css("overflow-y","hidden");

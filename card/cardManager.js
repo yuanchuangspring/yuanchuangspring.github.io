@@ -11,16 +11,30 @@ var tipText="";
 
 var pre_depth=0;
 
+function cloneObj(obj) {
+    var newObj = {};
+    if (obj instanceof Array) {
+      newObj = [];
+    }
+    for (var key in obj) {
+      var val = obj[key];
+      newObj[key] = typeof val === 'object' ? cloneObj(val) : val;
+    }
+    return newObj;
+  };
+
 function fpManager(scene,num){
-    if(paiku.length<num){
+    if(paiku.length<=num){
             qipaiku.forEach(function (qi){
                 paiku.push(qi);
                 qipaiku.splice(qipaiku.indexOf(qi),1);
             });
           }
-    for(fp=0;fp<num;fp++){
+    if(paiku.length<=num){fpnnn=paiku.length}else{fpnnn=num;}
+    for(fp=0;fp<fpnnn;fp++){
             
             ranfp=Math.floor(Math.random()*paiku.length);
+            
             postCard(boss.scene,paiku[ranfp]);
             
             paiku.splice(ranfp,1);
@@ -28,7 +42,7 @@ function fpManager(scene,num){
 }
 
 function postCard(scene,cardData){
-    
+    if(scene==undefined){return 1;}
     this.cardContainer=scene.add.container(sw+200,sh/16*12);
     addcard=scene.add.sprite(0,0,"mapCard");
     addcard.setScale(((sh-4)/3-15)/384/1.8);
@@ -43,13 +57,25 @@ function postCard(scene,cardData){
     
     Ades=scene.add.text(0,((sh-4)/3-15)/1.8/2-10,cardData.des,{ fontSize: '15px', fontFamily:"font1", fill: '#ffffff' });
     Ades.setOrigin(0.5,0.5);
+    
     addcard.cdata=cardData;
     this.cardContainer.add(addcard);
     this.cardContainer.add(Aname);
     this.cardContainer.add(Ades);
     this.cardContainer.add(cardImg);
-    
-    this.cardContainer.cardData=cardData;
+    if(cardData.type=="humans"){
+    cardLifeUI=scene.add.sprite(((sh-4)/3-15)/384/1.8*256/2-10,-1*(((sh-4)/3-15)/1.8/2-10),"humansLifeUI").setScale(((sh-4)/3-15)/384/10);
+    cardLifeUIText=scene.add.text(((sh-4)/3-15)/384/1.8*256/2-10,-1*(((sh-4)/3-15)/1.8/2-10),cardData.life,{ fontSize: '10px', fontFamily:"font1",  fill: '#000000' }).setOrigin(0.5,0.5);
+    this.cardContainer.add(cardLifeUI);
+    this.cardContainer.add(cardLifeUIText);
+
+    cardAttUI=scene.add.sprite(((sh-4)/3-15)/384/1.8*256/2*(-1)+10,-1*(((sh-4)/3-15)/1.8/2-10),"humansAttUI").setScale(((sh-4)/3-15)/384/10);
+    cardAttUIText=scene.add.text(((sh-4)/3-15)/384/1.8*256/2*(-1)+10,-1*(((sh-4)/3-15)/1.8/2-10),cardData.att,{ fontSize: '10px', fontFamily:"font1",  fill: '#000000' }).setOrigin(0.5,0.5);
+    this.cardContainer.add(cardAttUI);
+    this.cardContainer.add(cardAttUIText);
+    }
+
+    this.cardContainer.cardData=cloneObj(cardData);
     
     current_card.push(this.cardContainer);
     
@@ -71,8 +97,14 @@ function postCard(scene,cardData){
         postLine.clear();
         postLine.lineStyle(6,0x149228);
         
-        postLine.lineBetween(current_select.parentContainer.x,current_select.parentContainer.y,pointer.x,pointer.y);
+        //postLine.lineBetween(current_select.parentContainer.x,current_select.parentContainer.y,pointer.x,pointer.y);
  
+        p1=new Phaser.Math.Vector2(current_select.parentContainer.x,current_select.parentContainer.y);
+        p2=new Phaser.Math.Vector2(sw/2,sh/16*10);
+        p3=new Phaser.Math.Vector2(sw/2,sh/16*10);
+        p4=new Phaser.Math.Vector2(pointer.x,pointer.y);
+        beisaier=new Phaser.Curves.CubicBezier(p1,p2,p3,p4);
+        beisaier.draw(postLine);
         postsign.setPosition(pointer.x,pointer.y);
         
         for(sl=0;sl<layout.length;sl++){
@@ -87,14 +119,15 @@ function postCard(scene,cardData){
     scene.input.on("pointerup",function (pointer){
         
         //这块迟早出问题，container删的不彻底
-        if(tipText!=""){
+        if(tipText!="" && tipText!=undefined){
          
           tipText.destroy();
           tipText="";
           current_select.parentContainer.setDepth(1);
         }
-        if(((pointer.y-sh/2)**2<=400 && isSelect==true &&te==0 && onSpotHumans[layout.indexOf(current_select_layout)]=="" && current_select.parentContainer.cardData.type=="humans") || ((pointer.y-sh/2)**2<=400 && isSelect==true &&te==0 && onSpotHumans[layout.indexOf(current_select_layout)]!="" && current_select.parentContainer.cardData.type=="weapon")){
+        if(((pointer.y-sh/2)**2<=400 && isSelect==true &&te==0 && onSpotHumans[layout.indexOf(current_select_layout)]!="zhangai" && current_select.parentContainer.cardData.type=="humans") || ((pointer.y-sh/2)**2<=400 && isSelect==true &&te==0 && onSpotHumans[layout.indexOf(current_select_layout)]!="" && current_select.parentContainer.cardData.type=="weapon")  || ((pointer.y-sh/2)**2<=400 && isSelect==true &&te==0 && onSpotHumans[layout.indexOf(current_select_layout)]!="" && current_select.parentContainer.cardData.type=="jineng")){
           //选好了，post！
+         
           p=current_select.parentContainer;
           
           p.each(function (des){
@@ -123,18 +156,28 @@ function postCard(scene,cardData){
              ease: 'Linear',
              duration: 100,
              onComplete:function (){
+                 inf=[];hte="";
                  if(p.cardData.type=="humans"){
+                   if(onSpotHumans[layout.indexOf(current_select_layout)]!=""){
+                     if(onSpotHumans[layout.indexOf(current_select_layout)].weapon!=""){
+                       postCard(boss.scene,onSpotHumans[layout.indexOf(current_select_layout)].weapon.cardData);
+                       }
+                   postCard(boss.scene,onSpotHumans[layout.indexOf(current_select_layout)].cardData);
+                   inf=onSpotHumans[layout.indexOf(current_select_layout)].willInfluence;
+                   hte=onSpotHumans[layout.indexOf(current_select_layout)].hurtnumText;
+                   humansDead(layout.indexOf(current_select_layout));
+                   }
                  zancunsprite=gameSceneVar.add.sprite(current_select_layout.x,current_select_layout.y,p.cardData.key).setScale(((sh-4)/3-15)/384/5);
                  
                  zancunsprite.cardData=p.cardData;
                  
-                 zancunsprite.life=p.cardData.life;
+                 zancunsprite.hurtnumText=hte;
                  zancunsprite.longUI=[];
                  zancunsprite.effect=[];
                  zancunsprite.effectUI=[];
-                 zancunsprite.willInfluence=[];
+                 zancunsprite.willInfluence=inf;
                  zancunsprite.att=p.cardData.att;
-                 
+                 zancunsprite.weapon="";
                  
                  
                  //施工区
@@ -145,7 +188,7 @@ function postCard(scene,cardData){
                  humansLifeUI=gameSceneVar.add.sprite(zancunsprite.x+((sh-4)/3-15)/5/3,zancunsprite.y-((sh-4)/3-15)/6,"humansLifeUI").setScale(((sh-4)/3-15)/384/10);
                  humansLifeUI.UItype="humansLifeUI";
                  
-                 lifeUIText=gameSceneVar.add.text(humansLifeUI.x,humansLifeUI.y,zancunsprite.life,{ fontSize: '10px', fontFamily:"font1",  fill: '#000000' }).setOrigin(0.5,0.5);
+                 lifeUIText=gameSceneVar.add.text(humansLifeUI.x,humansLifeUI.y,zancunsprite.cardData.life,{ fontSize: '10px', fontFamily:"font1",  fill: '#000000' }).setOrigin(0.5,0.5);
                  
                  zancunsprite.longUI.push([humansLifeUI,lifeUIText]);
                  humansGroup[layout.indexOf(current_select_layout)].add(humansLifeUI);
@@ -246,7 +289,44 @@ function postCard(scene,cardData){
                        }
                    });
                  }
+                 if(p.cardData.type=="jineng" ){
+                   posdex=layout.indexOf(current_select_layout);
+                   
+                   
+                   for(func=0;func<p.cardData.action.length;func++){
+                     weaponDistribution(layout.indexOf(current_select_layout),p.cardData.action[func]);
+                   }
                  
+                   current_card.splice(current_card.indexOf(p),1);
+                   p.destroy();
+                   cardLayout(gameSceneVar);
+                   gameSceneVar.tweens.add({
+                       targets: zancunsprite,
+                       scale: ((sh-4)/3-15)/384/5*1.2,
+                       ease: 'Linear',
+                       duration: 500,
+                       yoyo:true,
+                       repeat:-1
+                   });
+                   gameSceneVar.tweens.add({
+                       targets: jiguang,
+                       width: 0,
+                       ease: 'Linear',
+                       duration: 500
+                   });
+                   gameSceneVar.tweens.add({
+                       targets: jiguang,
+                       x:jiguang.x+25,
+                       ease: 'Linear',
+                       duration: 500,
+                       onComplete:function (){
+                          jiguang.destroy();
+                      
+                       }
+                   });
+                   
+                   
+                 }
              }//oncomplete函数结束
           });//tween结束
           
@@ -286,10 +366,30 @@ function hurtBoss(num){
         x: boss.x+20,
         ease: 'Power1',
         duration: 200,
-        yoyo:true
+        yoyo:true,
+        onComplete:function(){
+         boss.clearTint()
+         if(boss.life<=0){
+           boss.scene.tweens.add({
+            targets: boss,
+            alpha: 0,
+            ease: 'Power1',
+            duration: 2000,
+        
+            onComplete:function(){
+                isjiesuan=true;
+                boss.scene.scene.pause("GamePlay");
+                boss.scene.scene.bringToTop("GameJiesuan");
+
+         
+            }
+          });
+          }
+        }
     });
-    setTimeout("boss.clearTint()",200);
+    if(boss.life>num){
     boss.life-=num;
+    }else{boss.life=0}
     boss_lifebarText.setText(boss.life+"/"+boss.fullLife);
     changeWidth(boss_lifebar.scene,boss_lifebar,512*0.6*(boss.life/boss.fullLife),200);
 }
@@ -302,8 +402,11 @@ function takeEffect(scene){
       if(onSpotHumans[te]!=""){
         moveToPointY(onSpotHumans[te].scene,onSpotHumans[te],onSpotHumans[te].y-20,200,true,function (){
             if(te<4){
+ 
+            if(!onSpotHumans[te].effect.hasOwnProperty("doubleCOF")){
               te+=1;
-              setTimeout("takeEffect(gameSceneVar)",500);
+            }else{if(onSpotHumans[te].effect["doubleCOF"][1]>1){onSpotHumans[te].effect["doubleCOF"][1]-=1}else{onSpotHumans[te].effect["doubleCOF"][1]=onSpotHumans[te].effect["doubleCOF"][0];te+=1;}}
+            setTimeout("takeEffect(gameSceneVar)",500);
               
               
             }else{setTimeout("bossAction();layout[4].setAlpha(0.6);moveToPointX(layout[4].scene,tekuang,-256*sw/7.5/256,1000)",500);}
@@ -394,7 +497,7 @@ function attimprove(position,num,backte=false){
     if(backte){te=0;}
 }
 
-function double(position,num,backte=false){
+function double(position,num,COF,backte=false){
     if(onSpotHumans.hasOwnProperty(te+position)&&onSpotHumans[te+position]!=""){
         doubleUIAni=tekuang.scene.add.sprite(onSpotHumans[te].x,onSpotHumans[te].y,"doubleUI");
         doubleUIAni.setAlpha(1);
@@ -405,11 +508,15 @@ function double(position,num,backte=false){
         if(onSpotHumans[te+position].effect.hasOwnProperty("double")){
             if(onSpotHumans[te+position].effect["double"]+num>=0){
                 onSpotHumans[te+position].effect["double"]+=num;
+                onSpotHumans[te+position].effect["doubleCOF"][0]+=num;
+                onSpotHumans[te+position].effect["doubleCOF"][1]+=num;
+                
                 onSpotHumans[te+position].effectUI["double"][1].setText(onSpotHumans[te+position].effect["double"]);
             } 
         }else{
            if(num>0){
             onSpotHumans[te+position].effect["double"]=num;
+            onSpotHumans[te+position].effect["doubleCOF"]=[COF,COF];
             onSpotHumans[te+position].effectUI["double"]=[];
             onSpotHumans[te+position].effectUI["double"][0]=boss.scene.add.sprite(onSpotHumans[te+position].x-((sh-4)/3-15)/5/3+((sh-4)/3-15)/5/3*(Object.keys(onSpotHumans[te+position].effectUI).length-1),onSpotHumans[te+position].y,"doubleUI").setScale(layZoom*0.3);
             onSpotHumans[te+position].effectUI["double"][1]=boss.scene.add.text(onSpotHumans[te+position].effectUI["double"][0].x,onSpotHumans[te+position].effectUI["double"][0].y,onSpotHumans[te+position].effect["double"],{ fontSize: '15px', fontFamily:"font1", fill: '#ffffff' }).setOrigin(0.5,0.5);
@@ -422,8 +529,6 @@ function double(position,num,backte=false){
         
         moveToPointX(tekuang.scene,doubleUIAni,onSpotHumans[te+position].x,500,false,function (){doubleUIAni.destroy();});
         changeAlpha(tekuang.scene,doubleUIAni,0,500,false,1,200);
-        scaleTo(boss.scene,onSpotHumans[te+position].longUI[1][0],((sh-4)/3-15)/384/10*2,200,true);
-        onSpotHumans[te+position].longUI[1][1].setText(onSpotHumans[te+position].att+ onSpotHumans[te+position].effect["double"]);
         
         
     }
@@ -434,8 +539,8 @@ function cure(position,num){
    
     if(onSpotHumans.hasOwnProperty(te+position)&&onSpotHumans[te+position]!=""){
         scaleTo(boss.scene,onSpotHumans[te+position].longUI[0][0],((sh-4)/3-15)/384/10*2,200,true);
-        onSpotHumans[te+position].life+=num
-        onSpotHumans[te+position].longUI[0][1].setText(onSpotHumans[te+position].life);
+        onSpotHumans[te+position].cardData.life+=num
+        onSpotHumans[te+position].longUI[0][1].setText(onSpotHumans[te+position].cardData.life);
                            
         
     }
@@ -452,7 +557,7 @@ function bossTrend(){
     if(bossddd.actionType=="STEP"){
         if(bossStepNum>bossddd.funcPool.length-1){bossStepNum=0;}
         
-        setTimeout("bossDistribution(bossddd.funcPool[bossStepNum][0]+'Trend',bossddd.funcPool[bossStepNum][1]);bossStepNum+=1;bossLastAction=bossddd.funcPool[bossStepNum];te=0;postCard(boss.scene,qishi);postButton.setAlpha(1);",1500);
+        setTimeout("bossDistribution(bossddd.funcPool[bossStepNum][0]+'Trend',bossddd.funcPool[bossStepNum][1]);bossStepNum+=1;bossLastAction=bossddd.funcPool[bossStepNum];te=0;fpManager(boss.scene,3);postButton.setAlpha(1);",1500);
         
     }
     
@@ -485,7 +590,7 @@ function hurtHumansByRandomTrend(hlist,num){
       layout[hlist[hitem]].setTint(0xff0000);
       xxx="-"+num;
       
-      if(!(onSpotHumans[hlist[hitem]].hasOwnProperty("hurtnumText"))){
+      if(!(onSpotHumans[hlist[hitem]].hurtnumText!="")){
           hurtnumText=boss.scene.add.text(layout[hlist[hitem]].x,layout[hlist[hitem]].y+layout[hlist[hitem]].height/2*layZoom+20,xxx,{ fontSize: '20px', fontFamily:"font1",  fill: '#f00430' });
           hurtnumText.setOrigin(0.5,0.5);
           onSpotHumans[hlist[hitem]].hurtnumText=hurtnumText;
@@ -527,11 +632,12 @@ function humansInfluence(){
                      
                        
                      }
-                     onSpotHumans[hhh].life-=onSpotHumans[hhh].willInfluence[inf][1];
-                     onSpotHumans[hhh].hurtnumText.destroy();
+                     onSpotHumans[hhh].cardData.life-=onSpotHumans[hhh].willInfluence[inf][1];
+                     console.log(onSpotHumans[hhh]);onSpotHumans[hhh].hurtnumText.destroy();
+                     
                      onSpotHumans[hhh].hurtnumText=null;
                      layout[hhh].clearTint();
-                     if(onSpotHumans[hhh].life<=0){
+                     if(onSpotHumans[hhh].cardData.life<=0){
                        humansDead(hhh);
                        break;
                      }else{
@@ -543,7 +649,7 @@ function humansInfluence(){
                            clearTintForHurt.push(onSpotHumans[hhh]);
                            setTimeout("for(cle=0;cle<clearTintForHurt.length;cle++){clearTintForHurt[cle].clearTint();}clearTintForHurt=[];",500);
                            moveToPointY(boss.scene,onSpotHumans[hhh],onSpotHumans[hhh].y+50,300,true,function (){});
-                           onSpotHumans[hhh].longUI[longui][1].setText(onSpotHumans[hhh].life);
+                           onSpotHumans[hhh].longUI[longui][1].setText(onSpotHumans[hhh].cardData.life);
                            
                         }
                      }
@@ -603,12 +709,14 @@ function humansDistribution(func,data){
 }
 
 function bossDistribution(func,data){
+  if(boss.life>0){
     if(func=="hurtHumansByRandomTrend"){
       hurtHumansByRandomTrend(RandomHumans(data[0]),data[1]);
     }
     if(func=="hurtHumansByRandom"){
       hurtHumansByRandom();
     }
+  }
 }
 
 function humansDead(n){
@@ -633,7 +741,7 @@ function weaponDistribution(pos,data,backit=false){
     }
     if(func=="double"){
       te=pos;
-      double(0,num,true);
+      double(0,num,2,true);
     }
 }
 

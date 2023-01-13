@@ -69,7 +69,7 @@ huaji={
   key:"huaji",
   life:100,
   actionType:"STEP",
-  
+  coin:60,
   funcPool:[ ["hurtHumansByRandom",[2,2]] ]
 }
 
@@ -80,6 +80,7 @@ shilaimu={
   actionType:"STEP",
   hurtHumans:3,
   att:3,
+  coin:50,
   funcPool:[ ["hurtHumansByRandom",[3,5]] ]
 }
 
@@ -93,14 +94,7 @@ maoweapon={
   type:"weapon"
 }
 
-dunweapon={
-  name:"盾",
-  key:"dun",
-  des:"坚固！",
-  tip:"增加使用者两点护甲",
-  action:[ ["protect",5] ],
-  type:"weapon"
-}
+
 
 clockweapon={
   name:"时钟",
@@ -109,4 +103,16 @@ clockweapon={
   tip:"使用者每回合行动两次",
   action:[ ["double",2] ],
   type:"weapon"
+}
+
+//jinengConfig
+
+
+judun={
+  name:"举盾",
+  key:"dun",
+  des:"技能牌",
+  tip:"增加使用者五点护甲",
+  action:[ ["protect",5] ],
+  type:"jineng"
 }

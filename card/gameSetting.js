@@ -1,3 +1,4 @@
+
 var GameSetting = new Phaser.Class({
   
     

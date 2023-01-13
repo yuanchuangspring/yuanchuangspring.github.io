@@ -1,3 +1,7 @@
+var SCENE;
+var mapGroup;
+var isinitmap=false;
+
 var GameMap = new Phaser.Class({
   
     
@@ -15,13 +19,19 @@ var GameMap = new Phaser.Class({
     
     preload:function (){
         
-        
+        this.load.image("map","assets/ui/map.png");
+        this.load.image("mapselect","assets/ui/mapselect.png");
     },
     create:function(){
         
+        SCENE=this;
+        mapGroup=this.add.group();
+        
+        mapUI=this.add.sprite(sw/2,150+sw/16*15/2,"map").setScale(sw/16*15/128).setTint(0xE7D09E);
+        
         $("#canvas").css("left",sw*1/32);
         $("#canvas").css("top","150px");
-        drawit();
+        drawit(isinitmap);
         
         //this.bgm=this.sound.add("bgm_setting");
         //this.bgm.play({volume: 1,loop:true});
@@ -35,6 +45,8 @@ var GameMap = new Phaser.Class({
         
         this.homeButton.on("pointerdown",function (eve){
             
+            MapToBegin=true;
+
             bgm.stop();
             
             this.scene.scene.start("GameBegin");
