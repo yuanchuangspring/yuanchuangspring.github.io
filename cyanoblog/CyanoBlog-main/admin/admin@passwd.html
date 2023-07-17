@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>tsblog</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+   
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+        <!-- Brand -->
+        <div class="container">
+            <a class="navbar-brand" href="#">tsblog</a>
+
+            <!-- Toggler/collapsibe Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">开源项目</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">博客</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+    <!-- Contents -->
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <a href="../index.html">返回主页</a>
+
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <div>
+                    <h1>tsblog 后台管理系统</h1>
+                </div>
+                <br>
+                <form name="form">
+                    <div class="mb-3 mt-3">
+                        <label for="id" class="form-label">文章编号:</label>
+                        <input type="text" class="form-control" id="id" placeholder="输入文章编号" name="id">
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">文章标题:</label>
+                        <input type="text" class="form-control" id="title" placeholder="输入文章标题" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="general" class="form-label">文章概述:</label>
+                        <input type="text" class="form-control" id="general" placeholder="输入文章概述" name="general">
+                    </div>
+                    <div class="mb-3">
+                    <label for="content">文章内容:</label>
+                    <button class="btn btn-primary" id="n">换行</button>
+                    <button class="btn btn-primary" id="code">插入代码</button>
+                    <textarea class="form-control" rows="5" id="content" placeholder="输入文章内容" name="content"></textarea>
+                    </div>
+                    <div class="form-check mb-3">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="remember"> Remember me
+                        </label>
+                    </div>
+                    
+                </form>
+                <button class="btn btn-primary" id="submitbutton">提交</button>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        function tosubmit(){
+            iid=document.forms["form"]["id"].value;
+            ititle=document.forms["form"]["title"].value;
+            igeneral=document.forms["form"]["general"].value;
+            icontent=document.forms["form"]["content"].value;
+            
+            $.post(
+                "../php/main.php?action=submitcontent",
+                {
+                    id:iid,
+                    title:ititle,
+                    general:igeneral,
+                    content:icontent
+                },
+                function (result){
+                    alert(result);
+                }
+            );
+        }
+        $("#submitbutton").click(function (){
+            tosubmit();
+        });
+        $("#n").click(function (){
+            $("#content").val($("#content").val()+"\n<div></div>\n<br>");
+            // 使光标在文本框末尾
+            $('#content')[0].selectionStart = $('#content')[0].selectionEnd = $('#content').val().length-11;
+            $("#content").focus();
+            
+            return false; //防止提交            
+        });    
+        $("#code").click(function (){
+            $("#content").val($("#content").val()+"\n<pre><code class='language-'></code></pre>\n<br>");
+            // 使光标在文本框末尾
+            $('#content')[0].selectionStart = $('#content')[0].selectionEnd = $('#content').val().length-18;
+            $("#content").focus();
+            
+            return false; //防止提交            
+        });    
+    </script>
+</body>
+
+</html>
