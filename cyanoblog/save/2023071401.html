@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>CyanoBlog</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link rel="stylesheet" type="text/css" href="../css/prism.css">
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="../index.js"></script>
+    <script src="../js/prism.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+      <!-- Brand -->
+      <div class="container">
+        <a class="navbar-brand" href="your blog url">CyanoBlog</a>
+      
+        <!-- Toggler/collapsibe Button -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+      <!-- Navbar links -->
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li> 
+        </ul>
+      </div> 
+    </nav>
+    <br>
+    <!-- Contents -->
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <a href="../index.html">返回主页</a>
+                
+            </div>
+        </div>
+        <br>
+        <div class="container">
+            <div>写IT类博客，最重要的一点就是将代码呈现出来，必须要实现代码高亮等基本功能，且必须兼容不同的编程语言。现在比较主流的第三方包就是prism，它支持自选语言，在线定制打包，因此更加轻巧简易。</div>
+<br>
+<div>首先我们进到它的官网：https://prismjs.com/download.html</div>
+<br>
+<div>可以看到，prism提供了大部分主流语言以供选择，选好之后，点击页面下方的download js 和 download css ，下载好两个文件之后在html中引入即可</div>
+<br>
+<div>在html中，我们可以用如下方式将代码嵌入</div>
+<br>
+<pre><code class='language-html'><xmp><pre>
+    <code class='language-js'> 
+        console.log("Hello World")
+    </code>
+</pre></xmp>
+</code></pre>
+<br>
+<div>注：在langua-的后面要加上所用的语言</div>
+<br></div></div></body></html>

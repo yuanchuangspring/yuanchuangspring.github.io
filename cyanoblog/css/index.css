@@ -1,0 +1,25 @@
+a{
+    text-decoration: none;
+}
+
+.nav-link{
+    margin-left:10px !important;
+}
+
+div{
+    font-weight:bold;
+    font-size:20px;
+    line-height:auto;
+}
+
+.blog-time{
+    font-size: 0.6em;
+}
+
+.blog-general{
+    font-size: 0.8em;
+}
+
+.blog-info{
+    font-size: 0.8em;
+}
