@@ -14,7 +14,7 @@ cover:          /assets/images/covers/cover_repomirage.png
 authors:
   - Hanyu Li *
   - Yichi Zhang *
-  - Zhu Speed
+  - Jian Hu
   - Yinpeng Dong
 # links:
 #   Code: https://github.com/luost26/academic-homepage
