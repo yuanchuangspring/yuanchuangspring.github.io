@@ -2,7 +2,7 @@
 title:          "RepoMirage: Do Code Agents Really Understand Repositary Structures?"
 date:           2026-02-05 00:00:00 +0800
 selected:       true
-pub:            "ICLR 2026 Workshop AIWILD and Realiable Autonomy"
+pub:            "ICLR Workshop AIWILD and Realiable Autonomy"
 # pub_pre:        "Submitted to "
 # pub_post:       'Accepted'
 pub_last:       ' <span class="badge badge-pill badge-publication badge-success">Accepted</span>'
@@ -16,7 +16,7 @@ authors:
   - Yichi Zhang *
   - Jian Hu
   - Yinpeng Dong
-# links:
-#   Code: https://github.com/luost26/academic-homepage
+links:
+  Paper: https://openreview.net/forum?id=ot1dVib0Sy
 #   Unsplash: https://unsplash.com/photos/sliced-in-half-pineapple--_PLJZmHZzk
 ---
