@@ -1,7 +1,7 @@
 ---
 title:          "Digital Tools for Enhancing Rural Government Efficiency: A Case Study with a Focus on Older Adults"
 date:           2024-10-28 00:00:00 +0800
-selected:       true
+selected:       false
 pub:            "Chinese CHI "
 # pub_pre:        "Submitted to "
 # pub_post:       'Under review.'
