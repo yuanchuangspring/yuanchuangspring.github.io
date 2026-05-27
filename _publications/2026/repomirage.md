@@ -17,6 +17,6 @@ authors:
   - Jian Hu
   - Yinpeng Dong
 links:
-  Paper: https://openreview.net/forum?id=ot1dVib0Sy
+  arxiv: https://arxiv.org/abs/2605.26177
 #   Unsplash: https://unsplash.com/photos/sliced-in-half-pineapple--_PLJZmHZzk
 ---
