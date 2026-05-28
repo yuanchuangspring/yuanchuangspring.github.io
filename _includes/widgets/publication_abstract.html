@@ -1,0 +1,16 @@
+{% assign abstract_text = include.abstract %}
+{% assign abstract_limit = include.limit | default: 360 %}
+{% assign abstract_size = abstract_text | size %}
+
+{% if abstract_size > abstract_limit %}
+<details class="publication-abstract-details small text-muted">
+    <summary>
+        <span class="abstract-short">{{ abstract_text | truncate: abstract_limit }}</span>
+        <span class="abstract-toggle abstract-more">Show more</span>
+        <span class="abstract-toggle abstract-less">Show less</span>
+    </summary>
+    <p class="abstract-full mb-0">{{ abstract_text }}</p>
+</details>
+{% else %}
+<p class="mt-0 mb-0 small text-muted">{{ abstract_text }}</p>
+{% endif %}

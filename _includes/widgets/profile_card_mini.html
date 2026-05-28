@@ -1,0 +1,124 @@
+<div
+    class="profile-sidebar sticky-top"
+    {% if site.data.profile.hometown_photo %}
+    style="--hometown-image: url('{{ site.data.profile.hometown_photo | relative_url }}');"
+    {% endif %}>
+    <div class="profile-sidebar-body">
+        <div class="profile-sidebar-mobile-head">
+        {% if site.data.profile.portrait_url %}
+        <div class="profile-sidebar-portrait">
+            <img
+                src="{{ site.data.profile.portrait_url | relative_url }}"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="{{ site.data.profile.portrait_caption }}"
+                alt="Portrait">
+        </div>
+        {% endif %}
+
+        <div class="profile-sidebar-title">
+        <div class="profile-sidebar-name">
+            {{ site.data.profile.primary_name }}
+        </div>
+
+        {% if site.data.profile.secondary_name %}
+        <div class="profile-sidebar-secondary">
+            {{ site.data.profile.secondary_name }}
+        </div>
+        {% endif %}
+        </div>
+        </div>
+
+        <div class="profile-sidebar-positions">
+            {% for position in site.data.profile.positions %}
+            <div>{{ position.name }}</div>
+            {% endfor %}
+        </div>
+
+        <a class="profile-sidebar-email email-text" href="mailto:{{ site.data.profile.email | encode_email }}">
+            {{ site.data.profile.email | replace: "@", "(at)" }}
+        </a>
+
+        <div class="profile-sidebar-links">
+            {% if site.data.profile.gscholar %}
+            {%- if site.data.profile.gscholar contains 'scholar.google' -%}
+            {%- assign gscholar_url = site.data.profile.gscholar -%}
+            {%- else -%}
+            {%- assign gscholar_url = 'https://scholar.google.com/citations?user=' | append: site.data.profile.gscholar -%}
+            {%- endif -%}
+            <a class="no-break" target="_blank" href="{{ gscholar_url }}" aria-label="Google Scholar">
+                <i class="fab fa-google-scholar"></i>
+            </a>
+            {% endif %}
+
+            {% if site.data.profile.github %}
+            <a class="no-break" target="_blank" href="https://github.com/{{ site.data.profile.github }}" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            {% endif %}
+
+            {% if site.data.profile.wechat_qrcode %}
+            <a class="no-break" data-toggle="modal" data-target="#modal-wechat" aria-label="WeChat">
+                <i class="fab fa-weixin"></i>
+            </a>
+            {% endif %}
+
+            {% if site.data.profile.twitter %}
+            <a class="no-break" target="_blank" href="https://twitter.com/{{ site.data.profile.twitter }}" aria-label="Twitter">
+                <i class="fab fa-twitter"></i>
+            </a>
+            {% endif %}
+
+            {% if site.data.profile.linkedin %}
+            <a class="no-break" target="_blank" href="https://www.linkedin.com/in/{{ site.data.profile.linkedin }}" aria-label="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            {% endif %}
+
+            {% if site.data.profile.orcid %}
+            <a class="no-break" target="_blank" href="https://orcid.org/{{ site.data.profile.orcid }}" aria-label="ORCID">
+                <i class="fab fa-orcid"></i>
+            </a>
+            {% endif %}
+        </div>
+
+        <a class="profile-visitor-badge" href="https://visitorbadge.io/status?path=https%3A%2F%2Fthestudent.fun" target="_blank" rel="noopener">
+            <img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fthestudent.fun&labelColor=%23b45240&countColor=%23fffdf8" alt="Visitor badge">
+        </a>
+
+        {% if site.data.profile.hometown_caption %}
+        <div class="profile-sidebar-caption">
+            {{ site.data.profile.hometown_caption }}
+        </div>
+        {% endif %}
+
+        <nav class="profile-sidebar-nav" aria-label="Main navigation">
+            {% for item in site.data.navigation.pages %}
+            <a class="{% if item.name == page.navbar_title %}active{% endif %}" href="{{ item.url | relative_url }}">
+                {{ item.name }}
+            </a>
+            {% endfor %}
+        </nav>
+    </div>
+</div>
+
+
+{% if site.data.profile.wechat_qrcode %}
+<div class="modal fade" id="modal-wechat" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <img src="{{ site.data.profile.wechat_qrcode | relative_url }}" class="img-fluid">
+            </div>
+            {% if site.data.profile.wechat_prompt %}
+            <div class="modal-body p-1">
+                {{ site.data.profile.wechat_prompt }}
+            </div>
+            {% endif %}
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
