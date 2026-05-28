@@ -48,43 +48,45 @@
             {%- endif -%}
             <a class="no-break" target="_blank" href="{{ gscholar_url }}" aria-label="Google Scholar">
                 <i class="fab fa-google-scholar"></i>
+                <span>Google Scholar</span>
             </a>
             {% endif %}
 
             {% if site.data.profile.github %}
             <a class="no-break" target="_blank" href="https://github.com/{{ site.data.profile.github }}" aria-label="GitHub">
                 <i class="fab fa-github"></i>
+                <span>GitHub</span>
             </a>
             {% endif %}
 
             {% if site.data.profile.wechat_qrcode %}
             <a class="no-break" data-toggle="modal" data-target="#modal-wechat" aria-label="WeChat">
                 <i class="fab fa-weixin"></i>
+                <span>WeChat</span>
             </a>
             {% endif %}
 
             {% if site.data.profile.twitter %}
             <a class="no-break" target="_blank" href="https://twitter.com/{{ site.data.profile.twitter }}" aria-label="Twitter">
                 <i class="fab fa-twitter"></i>
+                <span>Twitter</span>
             </a>
             {% endif %}
 
             {% if site.data.profile.linkedin %}
             <a class="no-break" target="_blank" href="https://www.linkedin.com/in/{{ site.data.profile.linkedin }}" aria-label="LinkedIn">
                 <i class="fab fa-linkedin"></i>
+                <span>LinkedIn</span>
             </a>
             {% endif %}
 
             {% if site.data.profile.orcid %}
             <a class="no-break" target="_blank" href="https://orcid.org/{{ site.data.profile.orcid }}" aria-label="ORCID">
                 <i class="fab fa-orcid"></i>
+                <span>ORCID</span>
             </a>
             {% endif %}
         </div>
-
-        <a class="profile-visitor-badge" href="https://visitorbadge.io/status?path=https%3A%2F%2Fthestudent.fun" target="_blank" rel="noopener">
-            <img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fthestudent.fun&labelColor=%23b45240&countColor=%23fffdf8" alt="Visitor badge">
-        </a>
 
         {% if site.data.profile.hometown_caption %}
         <div class="profile-sidebar-caption">

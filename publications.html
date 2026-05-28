@@ -3,13 +3,18 @@ layout: default
 title : Publications
 navbar_title: Publications
 body_attr: >-
-  data-spy="scroll" data-target="#navbar-year" data-offset="100"
+  data-side-layout="true"
+container_class: homepage-container
 ---
 
 {% assign pubs_by_year = site.publications | sort: "date" | reverse | group_by_exp: "item", "item.date | date: '%Y'" %}
 
-<div class="row">
-    <div class="col-12 col-lg-10">
+<div class="row homepage-layout">
+    <div class="col-12 col-xl-3 col-lg-3 col-md-4 homepage-sidebar-col">
+        {% include widgets/profile_card_mini.html %}
+    </div>
+
+    <div class="col-12 col-xl-9 col-lg-9 col-md-8 homepage-main-col publication-page-main">
         {% for year in pubs_by_year %}
         {% assign num_papers = year.items | size %}
         <h2 class="pt-4" id="year-{{ year.name }}">{{ year.name }}</h2>
@@ -20,13 +25,4 @@ body_attr: >-
         </div>
         {% endfor %}
     </div>
-
-    <div class="col-2 d-none d-lg-block">
-        <div id="navbar-year" class="nav nav-pills flex-column sticky-top" style="top: 80px">
-            {% for year in pubs_by_year %}
-            <a class="nav-link d-block" href="#year-{{ year.name }}">{{ year.name }}</a>
-            {% endfor %}
-        </div>
-    </div>
-
 </div>
