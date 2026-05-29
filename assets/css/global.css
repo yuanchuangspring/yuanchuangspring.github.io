@@ -690,8 +690,27 @@ a:hover {
 }
 
 @media (max-width: 767.98px) {
+    html,
+    body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
     body {
         padding-top: 4.3rem;
+    }
+
+    .homepage-container {
+        overflow-x: hidden;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .homepage-layout {
+        margin-left: 0;
+        margin-right: 0;
+        overflow-x: hidden;
+        width: 100%;
     }
 
     .profile-mini-card {
@@ -707,8 +726,8 @@ a:hover {
         display: block;
         flex: 0 0 100%;
         max-width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
+        padding-left: 12px;
+        padding-right: 12px;
         position: static;
         width: 100%;
     }
@@ -716,10 +735,56 @@ a:hover {
     .homepage-main-col {
         flex: 0 0 100%;
         max-width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
+        padding-left: 12px;
+        padding-right: 12px;
         position: static;
         width: 100%;
+    }
+
+    .homepage-main-col > .row {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+    }
+
+    .homepage-main-col > .row > .col {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .homepage-main-col > .card,
+    .homepage-main-col > .my-3,
+    .homepage-main-col > .row > .col > .card {
+        width: 100%;
+    }
+
+    .homepage-main-col .row,
+    .homepage-main-col .row.no-gutters {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .homepage-main-col .col,
+    .homepage-main-col [class*="col-"] {
+        min-width: 0;
+    }
+
+    .homepage-main-col .no-break {
+        white-space: normal;
+    }
+
+    .homepage-main-col h5,
+    .homepage-main-col p,
+    .homepage-main-col a {
+        overflow-wrap: anywhere;
+    }
+
+    .card:hover,
+    .rounded-xl:hover,
+    .homepage-main-col .my-3:hover,
+    .homepage-main-col .row.no-gutters:hover {
+        box-shadow: none !important;
+        transform: none;
     }
 
     .profile-sidebar {
