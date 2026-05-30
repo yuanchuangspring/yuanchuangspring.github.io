@@ -14,7 +14,9 @@ cover:          /assets/images/covers/cover_repomirage.png
 authors:
   - Hanyu Li *
   - Yichi Zhang *
-  - Jian Hu
+  - Speed Zhu
+  - Hang Su
+  - Jun Zhu
   - Yinpeng Dong
 links:
   arxiv: https://arxiv.org/abs/2605.26177
