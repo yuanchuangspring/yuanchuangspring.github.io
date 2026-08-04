@@ -1514,4 +1514,30 @@ a:hover {
     .about-photo-card .card-body .h3::after {
         background: var(--warm-coral) !important;
     }
+
+    .about-photo-card .about-card-body,
+    .education-honors-card .education-honors-card-body {
+        padding: 1rem !important;
+    }
+
+    .about-photo-card .about-card-title-row,
+    .about-photo-card .about-card-content-row {
+        padding: 0 !important;
+    }
+
+    .about-photo-card .about-card-title-row > .col,
+    .about-photo-card .about-card-content-row > .col,
+    .education-honors-card-body > .row > [class*="col-"] {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .education-honors-card-body .mx-2 {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .education-honors-card-body > .row > [class*="col-"] + [class*="col-"] {
+        margin-top: 1.25rem;
+    }
 }
