@@ -40,6 +40,37 @@ education:
   position: >- 
     B.S. in Information and Computing Science
   date: Sep. 2023 - present
+# - name: Queen Mary University of London
+#   logo: /assets/images/badges/bupt.png
+#   position: >- 
+#     B.S. in Information and Computing Science
+#   date: Sep. 2023 - present
+
+# Add school leadership and club experience here. Example:
+# student_activities:
+# - organization: Organization or Club Name
+#   role: Position
+#   date: Sep. 2024 - Jun. 2025
+#   description: Optional one-line description
+student_activities:
+- organization: Student Union, Queen Mary School of Hainan, BUPT
+  role: President
+- organization: Lixiang Innovation Studio, Queen Mary School of Hainan, BUPT
+  role: Founder
+
+internships:
+- organization: Beihang University
+  role: Research Intern
+  date: Jun. 2025 - Dec. 2025
+  description: Vision languge action (VLA); supervised by Prof. Zhaoxin Fan (BUAA)
+- organization: Nanyang Technological University & Squirrel AI
+  role: Research Intern
+  date: Aug. 2025 - Mar. 2026 
+  description: Multimodal safety alignment; supervised by Dr. Kun Wang (NTU)
+- organization: College AI, Tsinghua University
+  role: Research Intern
+  date: Oct. 2025 - present
+  description: Code agent evaluation; supervised by Prof. Yinpeng Dong (THU)
 
 # experience:
 # - name: Peking University

@@ -1,32 +1,81 @@
 ---
 layout: default
-title : Showcase
-navbar_title: Showcase
-container_class: container-xl
+title: Blog
+navbar_title: Blog
+permalink: /blog/
+body_attr: >-
+  data-side-layout="true"
+container_class: homepage-container
 ---
 
-{% assign cards_by_group = site.showcase | sort: "date" | reverse | where: "show", true | group_by_exp: "item", "item.group" %}
+{% assign posts = site.showcase | where: "blog", true | sort: "date" | reverse %}
 
-{% for group in cards_by_group %}
-<h1>{{ group.name }}</h1>
-<div class="row grid mb-4">
-    <div class="grid-sizer col-1"></div>
-    {% for item in group.items %}
-    {% if item.width >= 6 -%}
-        {%- assign width_sm = 12 -%}
-        {%- assign width_xs = 12 -%}
-    {%- elsif item.width >= 2 -%}
-        {%- assign width_sm = 6 -%}
-        {%- assign width_xs = 6 -%}
-    {%- else -%}
-        {%- assign width_sm = item.width | times: 2 | at_most: 12 -%}
-        {%- assign width_xs = item.width | times: 2 | at_most: 12 -%}
-    {%- endif -%}
-    <div class="p-2 grid-item col-md-{{ item.width | at_most: 12 }} col-sm-{{ width_sm }} col-{{ width_xs }}">
-        <div class="{% if item.class != null %}{{ item.class }}{% else %}card border-0 shadow-sm bg-white{% endif %}">
-            {{ item.content }}
-        </div>
+<div class="row homepage-layout">
+    <div class="col-12 col-xl-3 col-lg-3 col-md-4 homepage-sidebar-col">
+        {% include widgets/profile_card_mini.html %}
     </div>
-    {% endfor %}
+
+    <main class="col-12 col-xl-9 col-lg-9 col-md-8 homepage-main-col blog-page-main">
+        <div class="blog-page-heading pt-4">
+            <div>
+                <h2 class="mb-1">Blog</h2>
+                <p class="text-muted mb-0">研究、技术与生活随笔。</p>
+            </div>
+            <span class="blog-post-count">{{ posts.size }} posts</span>
+        </div>
+
+        {% if posts.size > 0 %}
+        <div class="row grid blog-masonry mt-3 mb-4">
+            <div class="grid-sizer col-1"></div>
+
+            <div class="grid-item col-12 col-lg-4 col-sm-6 p-2">
+                <div class="blog-note-tile h-100">
+                    <i class="fas fa-feather-alt"></i>
+                    <p class="mb-0">写下问题，<br>也写下寻找答案的过程。</p>
+                </div>
+            </div>
+
+            {% for post in posts %}
+            {% assign post_width = post.width | default: 6 %}
+            {% if post_width >= 8 %}
+                {% assign width_md = 12 %}
+                {% assign width_sm = 12 %}
+            {% elsif post_width >= 6 %}
+                {% assign width_md = 12 %}
+                {% assign width_sm = 12 %}
+            {% else %}
+                {% assign width_md = 6 %}
+                {% assign width_sm = 6 %}
+            {% endif %}
+            <div class="grid-item col-lg-{{ post_width | at_most: 12 }} col-md-{{ width_md }} col-sm-{{ width_sm }} col-12 p-2">
+                <article class="blog-masonry-card{% if post.featured %} blog-masonry-card-featured{% endif %}">
+                    <a class="blog-card-link" href="{{ post.url | relative_url }}" aria-label="阅读：{{ post.title }}">
+                        {% if post.cover %}
+                        <div class="blog-masonry-cover">
+                            <img class="lazy" data-src="{{ post.cover | relative_url }}" src="{{ '/assets/images/empty_300x200.png' | relative_url }}" alt="{{ post.cover_alt | default: post.title }}">
+                        </div>
+                        {% endif %}
+                        <div class="blog-masonry-body">
+                            <div class="blog-masonry-meta">
+                                {% if post.category %}<span>{{ post.category }}</span>{% endif %}
+                                <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y.%m.%d" }}</time>
+                            </div>
+                            <h3>{{ post.title }}</h3>
+                            <p>{{ post.summary | default: post.excerpt | strip_html | truncate: 150 }}</p>
+                            <div class="blog-masonry-footer">
+                                <div class="blog-masonry-tags">
+                                    {% for tag in post.tags limit: 2 %}<span>#{{ tag }}</span>{% endfor %}
+                                </div>
+                                <span class="blog-masonry-arrow"><i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="my-3 p-4 bg-white rounded-xl text-muted">第一篇文章正在酝酿中。</div>
+        {% endif %}
+    </main>
 </div>
-{% endfor %}

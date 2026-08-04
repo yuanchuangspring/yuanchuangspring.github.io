@@ -1,0 +1,51 @@
+---
+layout: default
+navbar_title: Blog
+body_attr: >-
+  data-side-layout="true"
+container_class: homepage-container
+---
+
+<div class="row homepage-layout">
+    <div class="col-12 col-xl-3 col-lg-3 col-md-4 homepage-sidebar-col">
+        {% include widgets/profile_card_mini.html %}
+    </div>
+
+    <main class="col-12 col-xl-9 col-lg-9 col-md-8 homepage-main-col blog-article-main">
+        <article class="blog-article">
+            <a class="blog-article-back" href="{{ '/blog/' | relative_url }}">
+                <i class="fas fa-angle-left"></i> Back to Blog
+            </a>
+
+            <header class="blog-article-header">
+                <div class="blog-article-meta">
+                    {% if page.category %}<span>{{ page.category }}</span>{% endif %}
+                    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y.%m.%d" }}</time>
+                    {% if page.read_time %}<span class="text-muted">{{ page.read_time }} min read</span>{% endif %}
+                </div>
+                <h1>{{ page.title }}</h1>
+                {% if page.summary %}<p>{{ page.summary }}</p>{% endif %}
+            </header>
+
+            {% if page.cover %}
+            <figure class="blog-article-cover">
+                <img src="{{ page.cover | relative_url }}" alt="{{ page.cover_alt | default: page.title }}">
+                {% if page.cover_caption %}<figcaption>{{ page.cover_caption }}</figcaption>{% endif %}
+            </figure>
+            {% endif %}
+
+            <div class="blog-article-content">
+                {{ content }}
+            </div>
+
+            <footer class="blog-article-footer">
+                {% if page.tags %}
+                <div class="blog-masonry-tags">
+                    {% for tag in page.tags %}<span>#{{ tag }}</span>{% endfor %}
+                </div>
+                {% endif %}
+                <a href="{{ '/blog/' | relative_url }}">More notes <i class="fas fa-angle-double-right"></i></a>
+            </footer>
+        </article>
+    </main>
+</div>

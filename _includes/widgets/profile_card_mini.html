@@ -104,7 +104,7 @@
 
         <nav class="profile-sidebar-nav" aria-label="Main navigation">
             {% for item in site.data.navigation.pages %}
-            <a class="{% if item.name == page.navbar_title %}active{% endif %}" href="{{ item.url | relative_url }}">
+            <a class="{% if item.name == page.navbar_title or page.collection == 'showcase' and item.name == 'Blog' %}active{% endif %}" href="{{ item.url | relative_url }}">
                 {{ item.name }}
             </a>
             {% endfor %}

@@ -1,0 +1,23 @@
+<section class="my-3 bg-white shadow-sm rounded-xl profile-list-card">
+    <h6 class="p-3 mb-0 border-bottom border-gray">{{ include.title }}</h6>
+    <div class="px-3 py-1 small">
+        {% if include.items and include.items.size > 0 %}
+            {% for item in include.items %}
+            <div class="profile-list-item py-2{% unless forloop.last %} border-bottom border-gray{% endunless %}">
+                <div class="d-flex align-items-baseline">
+                    <strong>{{ item.organization }}</strong>
+                    {% if item.date %}
+                    <span class="ml-auto pl-3 text-muted no-break"><i>{{ item.date }}</i></span>
+                    {% endif %}
+                </div>
+                <div class="profile-list-role">{{ item.role }}</div>
+                {% if item.description %}
+                <div class="text-muted mt-1">{{ item.description }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="profile-list-empty py-3 text-muted">{{ include.empty_text | default: "To be updated." }}</div>
+        {% endif %}
+    </div>
+</section>

@@ -34,5 +34,20 @@ container_class: homepage-container
         title='<i class="fas fa-star"></i> Selected Publications'
         %}
         {% endif %}
+
+        {% if site.data.display.homepage.show_internships %}
+        {% include widgets/profile_list_card.html
+            title='<i class="fas fa-briefcase"></i> Internships'
+            items=site.data.profile.internships
+        %}
+        {% endif %}
+
+        {% if site.data.display.homepage.show_student_activities %}
+        {% include widgets/profile_list_card.html
+            title='<i class="fas fa-users"></i> Leadership & Activities'
+            items=site.data.profile.student_activities
+            empty_text='Student leadership and club experience will be added soon.'
+        %}
+        {% endif %}
     </div>
 </div>
