@@ -2,9 +2,9 @@
 title:          "RepoMirage: Probing Repository Context Reasoning in Code Agents with Perturbations"
 date:           2026-02-05 00:00:00 +0800
 selected:       true
-pub:            "NeurIPS 2026 ED Track"
+pub:            "NeurIPS"
 # pub_pre:        "Submitted to "
-# pub_post:       'Accepted'
+# pub_post:       'Accepted (poster)'
 pub_last:       ' <span class="badge badge-pill badge-publication badge-success">Accepted</span>'
 pub_date:       "2026"
 # semantic_scholar_id: 204e3073870fae3d05bcbc2f6a8e263d9b72e776  # use this to retrieve citation count
