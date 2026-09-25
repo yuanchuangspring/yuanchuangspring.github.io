@@ -2,7 +2,7 @@
 title:          "RepoMirage: Probing Repository Context Reasoning in Code Agents with Perturbations"
 date:           2026-02-05 00:00:00 +0800
 selected:       true
-pub:            "ICLR Workshop AIWILD and Realiable Autonomy"
+pub:            "NeurIPS 2026 ED Track"
 # pub_pre:        "Submitted to "
 # pub_post:       'Accepted'
 pub_last:       ' <span class="badge badge-pill badge-publication badge-success">Accepted</span>'
