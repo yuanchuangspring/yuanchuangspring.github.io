@@ -21,5 +21,8 @@ authors:
 links:
   arxiv: https://arxiv.org/abs/2605.26177
   code: https://github.com/yuanchuangspring/RepoMirage
+  Project:
+    url: /paper/repomirage/
+    target: _self
 #   Unsplash: https://unsplash.com/photos/sliced-in-half-pineapple--_PLJZmHZzk
 ---

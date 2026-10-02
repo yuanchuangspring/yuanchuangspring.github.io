@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RepoMirage — Probing Repository Context Reasoning in Code Agents</title>
+  <meta name="description" content="RepoMirage is a perturbation-based evaluation suite for probing repository context reasoning in code agents." />
+  <meta name="keywords" content="RepoMirage, code agents, repository context reasoning, SWE-bench, coding agent, LLM, software engineering" />
+  <meta name="author" content="Hanyu Li, Yichi Zhang, Speed Zhu, Hang Su, Jun Zhu, Yinpeng Dong" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="canonical" href="https://thestudent.fun/paper/repomirage/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="RepoMirage — Probing Repository Context Reasoning in Code Agents" />
+  <meta property="og:description" content="Do strong SWE-bench scores really mean that code agents understand repositories? RepoMirage probes the gap with controlled repository-level perturbations." />
+  <meta property="og:url" content="https://thestudent.fun/paper/repomirage/" />
+  <meta property="og:image" content="https://thestudent.fun/paper/repomirage/static/images/repomirage-banner.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#fffdf9" />
+  <link rel="stylesheet" href="static/css/index.css" />
+</head>
+<body>
+  <main id="top">
+    <section class="hero container">
+      <h1>Repo<span class="accent">Mirage</span>: Probing Repository Context Reasoning in Code Agents with Perturbations</h1>
+
+      <div class="authors">
+        <a href="https://thestudent.fun" target="_blank" rel="noopener">Hanyu Li*</a>,
+        <span>Yichi Zhang*</span>,
+        <span>Speed Zhu</span>,
+        <span>Hang Su</span>,
+        <span>Jun Zhu</span>,
+        <span>Yinpeng Dong</span>
+      </div>
+      <div class="affiliations"><sup>1</sup> Beijing University of Posts and Telecommunications &nbsp; <sup>2</sup> Tsinghua University &nbsp; <sup>3</sup> Tencent</div>
+      <div class="equal">* Equal contribution; alphabetical order.</div>
+
+      <div class="actions">
+        <a class="action-btn" href="https://arxiv.org/abs/2605.26177" target="_blank" rel="noopener" aria-label="Paper on arXiv">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>
+          Paper
+        </a>
+        <a class="action-btn" href="https://github.com/yuanchuangspring/RepoMirage" target="_blank" rel="noopener" aria-label="RepoMirage GitHub repository">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .7a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.56v-2.2c-3.22.7-3.9-1.37-3.9-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.78 1.2 1.78 1.2 1.04 1.77 2.72 1.26 3.38.96.1-.75.4-1.26.73-1.55-2.57-.29-5.28-1.29-5.28-5.73 0-1.27.45-2.3 1.19-3.12-.12-.29-.52-1.47.11-3.07 0 0 .97-.31 3.16 1.19a10.9 10.9 0 0 1 5.76 0c2.19-1.5 3.16-1.19 3.16-1.19.63 1.6.23 2.78.11 3.07.74.82 1.19 1.85 1.19 3.12 0 4.45-2.71 5.44-5.29 5.73.42.36.79 1.07.79 2.16v3.2c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .7Z"/></svg>
+          Code
+        </a>
+        <a class="action-btn secondary" href="#citation" aria-label="Jump to BibTeX citation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3h10v18H7z"/><path d="M10 7h4M10 11h4M10 15h4"/></svg>
+          BibTeX
+        </a>
+      </div>
+
+      <div class="tldr reveal">
+        <div class="tldr-label">TL;DR</div>
+        <div class="qa">
+          <div class="qa-badge">Q</div>
+          <p>Do high scores on repository-level issue resolution reliably mean that code agents understand the repository context?</p>
+          <div class="qa-badge a">A</div>
+          <p>Not necessarily. When local cues are weakened, agents inspect much more of the repository yet solve fewer tasks. RepoMirage exposes this gap and identifies <strong>exploration drift</strong> as a key behavioral bottleneck.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="abstract" class="section">
+      <div class="container reveal">
+        <h2>Abstract</h2>
+        <p class="lead">Code agents now perform strongly on repository-level software engineering benchmarks, but end-to-end success does not directly reveal whether agents can identify task-relevant information across files and reason over the relations among them. RepoMirage uses controlled, semantics-preserving perturbations to increase the demand for repository context reasoning without changing the underlying issue-resolution task. It then turns the same structural bottlenecks into explicit tasks, analyzes agent trajectories, and studies a structure-first mitigation with RepoAnchor.</p>
+
+        <div class="question-box">
+          <div class="eyebrow">Core Question</div>
+          <div class="question">Are code agents truly reasoning over repository structure, or are they succeeding through localized surface cues?</div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric blue"><div class="number">53.8%</div><div class="label">of GPT-5 resolved instances inspect only one file.</div></div>
+          <div class="metric purple"><div class="number">88.0%</div><div class="label">of GPT-5 resolved instances inspect no more than three files.</div></div>
+          <div class="metric orange"><div class="number">66.8 → 49.8</div><div class="label">average resolved rate (%) after repository-level perturbation.</div></div>
+          <div class="metric green"><div class="number">4.77 → 13.24</div><div class="label">average number of accessed files after perturbation.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="method" class="section">
+      <div class="container reveal">
+        <h2>RepoMirage: A Two-Stage Probe</h2>
+        <p class="lead">We use perturbation as a diagnostic tool: first to test whether issue-resolution performance remains stable under higher repository-context demands, and then to make the underlying reasoning capability directly measurable.</p>
+
+        <div class="figure-card">
+          <img src="static/images/overview.png" alt="Overview of RepoMirage-Perturb and RepoMirage-Extend" loading="lazy" />
+          <div class="figcap">RepoMirage-Perturb preserves the original task while weakening local cues; RepoMirage-Extend converts the targeted structural bottlenecks into explicit task objectives.</div>
+        </div>
+
+        <div class="card-grid">
+          <article class="info-card">
+            <span class="kicker">P1</span>
+            <h3>Dependency-Path Indirection</h3>
+            <p>Direct imports are rerouted through multi-hop proxy paths so the true dependency can only be recovered by tracing across files.</p>
+          </article>
+          <article class="info-card">
+            <span class="kicker">P2</span>
+            <h3>Runtime-Target Masking</h3>
+            <p>The real runtime target is hidden behind a wrapper and nearby decoy files, forcing agents to distinguish surface relevance from runtime relevance.</p>
+          </article>
+          <article class="info-card">
+            <span class="kicker">P3</span>
+            <h3>Local-Value Externalization</h3>
+            <p>Task-relevant local values are moved to external resources, requiring agents to recover value relations across files.</p>
+          </article>
+        </div>
+
+        <h3>More exploration, worse issue resolution</h3>
+        <p class="lead">Across eight frontier models, every perturbation type hurts performance, while the combined setting forces agents to inspect much more repository context.</p>
+
+        <p class="caption"><b>Table 1.</b> Performance on RepoMirage-Perturb. We compare model performance on the original SWE-Bench instances and their perturbed counterparts under the same issue task.</p>
+        <div class="table-block"><div class="table-wrapper"><table class="results-table">
+        <thead><tr><th rowspan="2">Model</th><th colspan="3">Resolved %</th><th colspan="3">Avg. #Files</th></tr>
+        <tr><th>SWE-Bench</th><th>Perturb</th><th class="drop">Drop</th><th>SWE-Bench</th><th>Perturb</th><th class="ratio">Ratio</th></tr></thead><tbody>
+        <tr><td>GPT-4.1</td><td>38.40</td><td>18.20</td><td class="drop">-52.60%</td><td>1.69</td><td>7.10</td><td class="ratio">4.20×</td></tr>
+        <tr><td>GPT-5</td><td>65.00</td><td>49.00</td><td class="drop">-24.61%</td><td>2.83</td><td>7.04</td><td class="ratio">2.49×</td></tr>
+        <tr><td>Gemini-3.1-Pro</td><td>70.60</td><td>54.40</td><td class="drop">-22.95%</td><td>17.32</td><td>24.94</td><td class="ratio">1.44×</td></tr>
+        <tr><td>Claude-Sonnet-4.6</td><td>75.20</td><td>63.20</td><td class="drop">-15.96%</td><td>2.20</td><td>6.76</td><td class="ratio">3.07×</td></tr>
+        <tr><td>DeepSeek-V3.2</td><td>70.00</td><td>52.00</td><td class="drop">-25.71%</td><td>4.66</td><td>14.32</td><td class="ratio">3.07×</td></tr>
+        <tr><td>MiniMax-M2.7</td><td>78.20</td><td>65.40</td><td class="drop">-16.37%</td><td>2.24</td><td>6.92</td><td class="ratio">3.09×</td></tr>
+        <tr><td>Qwen3-Coder-Next</td><td>69.20</td><td>42.60</td><td class="drop">-38.44%</td><td>4.66</td><td>26.90</td><td class="ratio">5.77×</td></tr>
+        <tr><td>Qwen3.6-35B-A3B</td><td>67.80</td><td>53.40</td><td class="drop">-21.24%</td><td>2.52</td><td>11.90</td><td class="ratio">4.72×</td></tr>
+        </tbody></table></div></div>
+
+        <h3>RepoMirage-Extend: make repository context reasoning explicit</h3>
+        <div class="task-grid">
+          <div class="task"><strong>Multi-File</strong><span>Coordinate realistic edits across multiple files.</span></div>
+          <div class="task"><strong>Proxy Chain</strong><span>Trace and reconstruct hidden dependency chains.</span></div>
+          <div class="task"><strong>Runtime Target</strong><span>Identify the file actually used at runtime.</span></div>
+          <div class="task"><strong>Missing Constant</strong><span>Recover distributed definitions and value associations.</span></div>
+        </div>
+        <p class="lead"><strong>66.8% → 25.3%.</strong> On the same underlying benchmark instances, average performance drops sharply when repository context reasoning becomes the explicit task objective.</p>
+
+        <p class="caption"><b>Table 2.</b> Performance on RepoMirage-Extend. Org. denotes performance on the original SWE-Bench Verified for the same instance subset, and Extend denotes performance on RepoMirage-Extend. <b>Bold</b> marks the best result, and <u>underline</u> marks the second-best result.</p>
+        <div class="table-block"><div class="table-wrapper"><table class="results-table">
+        <thead><tr><th rowspan="2">Model</th><th colspan="2">Multi-File</th><th colspan="2">Proxy Chain</th><th colspan="2">Runtime Target</th><th colspan="2">Missing Constant</th><th rowspan="2">Avg.</th></tr>
+        <tr><th>Org.</th><th>Extend</th><th>Org.</th><th>Extend</th><th>Org.</th><th>Extend</th><th>Org.</th><th>Extend</th></tr></thead><tbody>
+        <tr><td>GPT-4.1</td><td>10.00</td><td>2.86</td><td>45.14</td><td>4.17</td><td>40.14</td><td>3.52</td><td>43.75</td><td>2.78</td><td>3.40</td></tr>
+        <tr><td>GPT-5</td><td>31.43</td><td class="best">25.71</td><td>70.83</td><td>11.11</td><td>68.31</td><td>35.92</td><td>72.22</td><td>36.80</td><td>27.60</td></tr>
+        <tr><td>Gemini-3.1-Pro</td><td>38.57</td><td>14.29</td><td>77.08</td><td>22.22</td><td>76.06</td><td class="second">43.66</td><td>74.31</td><td class="best">71.53</td><td class="best">41.40</td></tr>
+        <tr><td>Claude-Sonnet-4.6</td><td>41.43</td><td>15.71</td><td>80.56</td><td class="best">36.81</td><td>80.28</td><td>30.28</td><td>81.25</td><td>23.61</td><td>28.20</td></tr>
+        <tr><td>DeepSeek-V3.2</td><td>35.71</td><td>20.00</td><td>74.31</td><td>11.80</td><td>75.35</td><td class="best">59.86</td><td>77.08</td><td class="second">57.64</td><td class="second">39.80</td></tr>
+        <tr><td>MiniMax-M2.7</td><td>45.71</td><td>22.86</td><td>81.25</td><td>7.64</td><td>86.62</td><td>26.76</td><td>81.94</td><td>6.25</td><td>14.80</td></tr>
+        <tr><td>Qwen3-Coder-Next</td><td>44.29</td><td>17.14</td><td>72.92</td><td class="second">29.17</td><td>75.35</td><td>7.04</td><td>71.53</td><td>34.03</td><td>22.60</td></tr>
+        <tr><td>Qwen3.6-35B-A3B</td><td>31.43</td><td class="second">24.29</td><td>80.56</td><td>14.58</td><td>72.41</td><td>19.01</td><td>68.00</td><td>38.89</td><td>24.20</td></tr>
+        </tbody></table></div></div>
+      </div>
+    </section>
+
+    <section id="diagnosis" class="section">
+      <div class="container reveal">
+        <h2>Why Do Agents Fail? Exploration Drift</h2>
+        <p class="lead">Under stronger repository-context demands, agents do not simply stop exploring. They inspect more files, spend longer before the first edit, and become more likely to continue exploring instead of turning gathered information into concrete edits.</p>
+
+        <div class="figure-card">
+          <img src="static/images/exploration-drift.png" alt="Behavior shifts under RepoMirage-Extend showing exploration drift" loading="lazy" />
+          <div class="figcap">Agents access broader repository context, but the extra exploration does not reliably translate into editing decisions.</div>
+        </div>
+
+        <div class="question-box">
+          <div class="eyebrow">Mechanistic Bottleneck</div>
+          <div class="question">The problem is not only finding more files. It is organizing multi-file observations into an actionable structural understanding.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="repoanchor" class="section">
+      <div class="container reveal">
+        <h2>RepoAnchor: Structure First, Then Solve</h2>
+        <p class="lead">RepoAnchor separates repository exploration from downstream problem solving. Stage 1 explores the task-relevant codebase and writes a structured repository summary; Stage 2 uses that summary to focus on implementation, editing, and validation.</p>
+
+        <div class="figure-card">
+          <img src="static/images/repoanchor-pipeline.png" alt="Two-stage RepoAnchor pipeline" loading="lazy" />
+          <div class="figcap">A structured intermediate summary transfers repository understanding from exploration to problem solving.</div>
+        </div>
+
+        <div class="figure-card">
+          <img src="static/images/repoanchor-results.png" alt="Performance gains from RepoAnchor on four representative models" loading="lazy" />
+          <div class="figcap">RepoAnchor consistently improves performance across four representative models and all RepoMirage-Extend task families.</div>
+        </div>
+
+                <div class="gains">
+          <div class="gain"><b>+17.0</b><span>GPT-5 average gain</span></div>
+          <div class="gain"><b>+16.0</b><span>DeepSeek-V3.2 average gain</span></div>
+          <div class="gain"><b>+7.2</b><span>MiniMax-M2.7 average gain</span></div>
+          <div class="gain"><b>+8.6</b><span>Gemini-3.1-Pro average gain</span></div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="citation" class="section">
+      <div class="container reveal">
+        <h2>BibTeX</h2>
+        <p class="lead">If you find RepoMirage useful, please consider citing our work.</p>
+        <div class="bibtex-wrap">
+          <button class="copy-btn" type="button" data-copy-bibtex>Copy</button>
+          <pre id="bibtex">@article{li2026repomirage,
+  title={RepoMirage: Probing Repository Context Reasoning in Code Agents with Perturbations},
+  author={Hanyu Li and Yichi Zhang and Speed Zhu and Hang Su and Jun Zhu and Yinpeng Dong},
+  journal={arXiv preprint arXiv:2605.26177},
+  year={2026},
+  url={https://arxiv.org/abs/2605.26177}
+}</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div>RepoMirage project page · <span id="year"></span></div>
+      <div>Academic project-page layout inspired by the <a href="https://nerfies.github.io/" target="_blank" rel="noopener">Nerfies</a> style used by many research project pages.</div>
+    </div>
+  </footer>
+
+  <script src="static/js/index.js"></script>
+</body>
+</html>
